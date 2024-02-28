@@ -9,8 +9,6 @@ const {
   removeUsers,
 } = require("../controllers/users-controller");
 
-
-
 /**
  *  @swagger
  *  components:

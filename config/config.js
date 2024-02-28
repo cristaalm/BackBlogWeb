@@ -4,7 +4,7 @@ const path = require("path");
 const colors = require('colors');
 
 dotenv.config({
-  path: path.resolve(__dirname, `../${process.env.NODE_ENV.trim()}.env`),
+  path: path.resolve(__dirname, `../${process.env.NODE_ENV ? process.env.NODE_ENV.trim() : 'development'}.env`),
 });
 
 const db = new Sequelize(

@@ -5,7 +5,7 @@ const colors = require("colors");
 const { errorHandler } = require("./middleware/error-handler");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
-
+const { QueryTypes } = require("sequelize");
 const app = express();
 
 const corsOptions = {
@@ -36,8 +36,30 @@ db.sync()
       console.log(`Server is running on port ${PORT}.`.yellow);
     });
   })
+  .then(async () => {
+    var initModels = require("./model/init-models");
+    var models = initModels(db);
+    listaCategorias = await models.categoria.findAll();
+    listaCategorias.forEach((categoria) => {
+      console.log(categoria.dataValues);
+      console.log("La categoría es: " + categoria.dataValues.nombre);
+    });
+
+    // const categorias = await db.query("select * from categoria", {
+    //   type: QueryTypes.SELECT,
+    // });
+    // console.log(categorias);
+
+    // db.query("select * from categoria", (err, res) => {
+    //   if (!err) {
+    //     console.log(res.rows);
+    //   } else {
+    //     console.log(err.message);
+    //   }
+    // });
+  })
   .catch((err) => {
-    console.log("Error", err);
+    console.error(err);
   });
 
 // rout
@@ -61,5 +83,4 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
-
-module.exports = app
+module.exports = app;
