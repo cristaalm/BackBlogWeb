@@ -39,24 +39,11 @@ db.sync()
   .then(async () => {
     var initModels = require("./model/init-models");
     var models = initModels(db);
-    listaCategorias = await models.categoria.findAll();
+    listaCategorias = await models.usuario.findAll();
     listaCategorias.forEach((categoria) => {
       console.log(categoria.dataValues);
-      console.log("La categoría es: " + categoria.dataValues.nombre);
+      console.log("La categoría es: " + categoria.dataValues.username);
     });
-
-    // const categorias = await db.query("select * from categoria", {
-    //   type: QueryTypes.SELECT,
-    // });
-    // console.log(categorias);
-
-    // db.query("select * from categoria", (err, res) => {
-    //   if (!err) {
-    //     console.log(res.rows);
-    //   } else {
-    //     console.log(err.message);
-    //   }
-    // });
   })
   .catch((err) => {
     console.error(err);

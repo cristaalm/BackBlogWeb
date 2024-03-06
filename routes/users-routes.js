@@ -7,6 +7,7 @@ const {
   findtUsersById,
   updateUsers,
   removeUsers,
+  findUsersByName,
 } = require("../controllers/users-controller");
 
 /**
@@ -104,6 +105,43 @@ routes.get("/:id", findtUsersById);
 
 /**
  * @swagger
+ * /api/users/login:
+ *    post:
+ *      tags:
+ *        - Users
+ *      description: Get users API
+ *      summary: Get users data
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                nombreusuario:
+ *                  type: string
+ *                  description: enter your nombreusuario
+ *                  example: andi17x
+ *                contraseña:
+ *                  type: string
+ *                  description: enter your contraseña
+ *                  example: andi@gmail.com
+ *      responses:
+ *        200:
+ *          description: Successfully found user data
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully found user data!
+ */
+routes.post("/login", findUsersByName);
+
+/**
+ * @swagger
  * /api/users/:
  *    post:
  *      tags:
@@ -117,18 +155,26 @@ routes.get("/:id", findtUsersById);
  *            schema:
  *              type: object
  *              properties:
- *                username:
+ *                nombreusuario:
  *                  type: string
- *                  description: enter your username
+ *                  description: enter your nombreusuario
  *                  example: andi17x
- *                password:
+ *                nombre:
  *                  type: string
- *                  description: enter your password
+ *                  description: enter your nombre
  *                  example: adminpassword12
- *                email:
+ *                correoelectronico:
  *                  type: string
- *                  description: enter your email
+ *                  description: enter your correoelectronico
  *                  example: andi@gmail.com
+ *                contraseña:
+ *                  type: string
+ *                  description: enter your contraseña
+ *                  example: andi@gmail.com
+ *                perfil:
+ *                  type: string
+ *                  description: enter your perfil
+ *                  example: Editor
  *      responses:
  *        200:
  *          description: Successfully created data
@@ -166,17 +212,25 @@ routes.post("/", createUsers);
  *            schema:
  *              type: object
  *              properties:
- *                username:
+ *                nombreusuario:
  *                  type: string
- *                  description: enter your username
+ *                  description: enter your nombreusuario
  *                  example: andi17x
- *                password:
+ *                nombre:
  *                  type: string
- *                  description: enter your password
+ *                  description: enter your nombre
  *                  example: adminpassword12
- *                email:
+ *                correoelectronico:
  *                  type: string
- *                  description: enter your email
+ *                  description: enter your correoelectronico
+ *                  example: andi@gmail.com
+ *                contraseña:
+ *                  type: string
+ *                  description: enter your contraseña
+ *                  example: andi@gmail.com
+ *                perfil:
+ *                  type: string
+ *                  description: enter your perfil
  *                  example: andi@gmail.com
  *      responses:
  *        200:

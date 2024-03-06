@@ -40,8 +40,7 @@ db.sync()
   });
 
 //Route
-app.use("/api/users", require("./routes/usersRoutes"));
-app.use("/api/users", require("./routes/usersRoutes"));
+app.use("/api/users", require("./routes/users-routes"));
 
 //Global error handler
 app.use(errorHandler);

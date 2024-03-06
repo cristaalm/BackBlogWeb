@@ -60,11 +60,11 @@ describe("/GET users", () => {
       });
   });
 
-  it("It should GET users by id", (done) => {
-    const id = 1;
+  it("It should GET users by name", (done) => {
+    const nombreusuario = "admin";
     chai
       .request(app)
-      .get(`/api/users/${id}`)
+      .get(`/api/users/${nombreusuario}`)
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.be.a("object");
