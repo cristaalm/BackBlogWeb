@@ -92,11 +92,13 @@ const findUsersByName = AsyncHandler(async (req, res) => {
     // Verificar si se encontró un usuario
     if (usuario) {
       return res.status(200).json({
-        logged: "True",
+        logged: true,
+        description: "Usuario logueado correctamente",
       });
     } else {
-      return res.status(404).json({
-        description: "User not found!",
+      return res.status(200).json({
+        logged: false,
+        description: "Usuario o contraseña incorrecta",
       });
     }
   } catch (error) {
