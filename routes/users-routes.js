@@ -8,55 +8,56 @@ const {
   updateUsers,
   removeUsers,
   findUsersByName,
+  findAllCategories
 } = require("../controllers/users-controller");
 
-/**
- *  @swagger
- *  components:
- *    schemas:
- *      Users:
- *        type: object
- *        properties:
- *          username:
- *            type: string
- *            description: enter your username
- *            example: andi17x
- *          password:
- *            type: string
- *            description: enter your password
- *            example: adminpassword12
- *          email:
- *            type: string
- *            description: enter your email
- *            example: andi@gmail.com
- */
+  /**
+   *  @swagger
+   *  components:
+   *    schemas:
+   *      Users:
+   *        type: object
+   *        properties:
+   *          username:
+   *            type: string
+   *            description: enter your username
+   *            example: andi17x
+   *          password:
+   *            type: string
+   *            description: enter your password
+   *            example: adminpassword12
+   *          email:
+   *            type: string
+   *            description: enter your email
+   *            example: andi@gmail.com
+   */
 
-/**
- * @swagger
- * /api/users:
- *  get:
- *    tags:
- *      - Users
- *    summary: Retrieve a list of users
- *    description: Retrieve a list of task froma users table
- *    responses:
- *      200:
- *        description: A list of users.
- *        content: 
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                description:
- *                  type: string
- *                  example: Successfully fetched all data!
- *                data:
- *                  type: array
- *                  items:
- *                    $ref: '#/components/schemas/Users'
- * 
- */
-routes.get("/", findAllUsers);
+  /**
+   * @swagger
+   * /api/users:
+   *  get:
+   *    tags:
+   *      - Users
+   *    summary: Retrieve a list of users
+   *    description: Retrieve a list of task froma users table
+   *    responses:
+   *      200:
+   *        description: A list of users.
+   *        content: 
+   *          application/json:
+   *            schema:
+   *              type: object
+   *              properties:
+   *                description:
+   *                  type: string
+   *                  example: Successfully fetched all data!
+   *                data:
+   *                  type: array
+   *                  items:
+   *                    $ref: '#/components/schemas/Users'
+   * 
+   */
+  routes.get("/", findAllUsers);
 /**
  * @swagger
  * /api/users/{id}:
@@ -278,5 +279,53 @@ routes.patch("/:id", updateUsers);
  * 
  */
 routes.delete("/:id", removeUsers);
+
+  /**
+   *  @swagger
+   *  components:
+   *    schemas:
+   *      Users:
+   *        type: object
+   *        properties:
+   *          username:
+   *            type: string
+   *            description: enter your username
+   *            example: andi17x
+   *          password:
+   *            type: string
+   *            description: enter your password
+   *            example: adminpassword12
+   *          email:
+   *            type: string
+   *            description: enter your email
+   *            example: andi@gmail.com
+   */
+
+  /**
+   * @swagger
+   * /api/categories:
+   *  get:
+   *    tags:
+   *      - Categories
+   *    summary: Retrieve a list of categories
+   *    description: Retrieve a list of task froma categories table
+   *    responses:
+   *      200:
+   *        description: A list of categories.
+   *        content: 
+   *          application/json:
+   *            schema:
+   *              type: object
+   *              properties:
+   *                description:
+   *                  type: string
+   *                  example: Successfully fetched all data!
+   *                data:
+   *                  type: array
+   *                  items:
+   *                    $ref: '#/components/schemas/Categories'
+   * 
+   */
+  routes.get("/", findAllCategories);
 
 module.exports = routes;

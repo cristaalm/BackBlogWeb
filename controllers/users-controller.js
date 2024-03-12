@@ -13,6 +13,17 @@ const findAllUsers = AsyncHandler(async (req, res) => {
   });
 });
 
+const findAllCategories = AsyncHandler(async (req, res) => {
+  var initModels = require("../model/init-models");
+  var models = initModels(db);
+  listaCategorias = await models.categoria.findAll();
+
+  res.status(200).json({
+    description: "Successsfully fetched users data!",
+    data: listaCategorias,
+  });
+});
+
 const createUsers = AsyncHandler(async (req, res) => {
   if (!req.body.nombreusuario) {
     res.status(400).json({
@@ -139,4 +150,5 @@ module.exports = {
   updateUsers,
   removeUsers,
   findUsersByName,
+  findAllCategories
 };
