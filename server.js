@@ -40,10 +40,15 @@ db.sync()
   .then(async () => {
     var initModels = require("./model/init-models");
     var models = initModels(db);
-    listaCategorias = await models.usuario.findAll();
+    listaUsuarios = await models.usuario.findAll();
+    listaUsuarios.forEach((usuario) => {
+      console.log(usuario.dataValues);
+      console.log("La categoría es: " + usuario.dataValues.username);
+    });
+    listaCategorias = await models.categoria.findAll();
     listaCategorias.forEach((categoria) => {
       console.log(categoria.dataValues);
-      console.log("La categoría es: " + categoria.dataValues.username);
+      console.log("La categoría es: " + categoria.dataValues.nombre);
     });
   })
   .catch((err) => {
@@ -52,6 +57,7 @@ db.sync()
 
 // rout
 app.use("/api/users", require("./routes/users-routes"));
+app.use("/api/categories", require("./routes/categories-routes"));
 
 // global error handler
 app.use(errorHandler);
