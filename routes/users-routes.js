@@ -8,56 +8,55 @@ const {
   updateUsers,
   removeUsers,
   findUsersByName,
-  findAllCategories
 } = require("../controllers/users-controller");
 
-  /**
-   *  @swagger
-   *  components:
-   *    schemas:
-   *      Users:
-   *        type: object
-   *        properties:
-   *          username:
-   *            type: string
-   *            description: enter your username
-   *            example: andi17x
-   *          password:
-   *            type: string
-   *            description: enter your password
-   *            example: adminpassword12
-   *          email:
-   *            type: string
-   *            description: enter your email
-   *            example: andi@gmail.com
-   */
+/**
+ *  @swagger
+ *  components:
+ *    schemas:
+ *      Users:
+ *        type: object
+ *        properties:
+ *          username:
+ *            type: string
+ *            description: enter your username
+ *            example: andi17x
+ *          password:
+ *            type: string
+ *            description: enter your password
+ *            example: adminpassword12
+ *          email:
+ *            type: string
+ *            description: enter your email
+ *            example: andi@gmail.com
+ */
 
-  /**
-   * @swagger
-   * /api/users:
-   *  get:
-   *    tags:
-   *      - Users
-   *    summary: Retrieve a list of users
-   *    description: Retrieve a list of task froma users table
-   *    responses:
-   *      200:
-   *        description: A list of users.
-   *        content: 
-   *          application/json:
-   *            schema:
-   *              type: object
-   *              properties:
-   *                description:
-   *                  type: string
-   *                  example: Successfully fetched all data!
-   *                data:
-   *                  type: array
-   *                  items:
-   *                    $ref: '#/components/schemas/Users'
-   * 
-   */
-  routes.get("/", findAllUsers);
+/**
+ * @swagger
+ * /api/users:
+ *  get:
+ *    tags:
+ *      - Users
+ *    summary: Retrieve a list of users
+ *    description: Retrieve a list of task froma users table
+ *    responses:
+ *      200:
+ *        description: A list of users.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                description:
+ *                  type: string
+ *                  example: Successfully fetched all data!
+ *                data:
+ *                  type: array
+ *                  items:
+ *                    $ref: '#/components/schemas/Users'
+ *
+ */
+routes.get("/", findAllUsers);
 /**
  * @swagger
  * /api/users/{id}:
@@ -77,7 +76,7 @@ const {
  *      responses:
  *        200:
  *          description: single user data.
- *          content: 
+ *          content:
  *            application/json:
  *              schema:
  *                type: object
@@ -100,7 +99,7 @@ const {
  *                        type: string
  *                        description: enter your email
  *                        example: andi@gmail.com
- * 
+ *
  */
 routes.get("/:id", findtUsersById);
 
@@ -186,8 +185,8 @@ routes.post("/login", findUsersByName);
  *                properties:
  *                  description:
  *                    type: string
- *                    example: Successfully created data! 
- *                
+ *                    example: Successfully created data!
+ *
  */
 routes.post("/", createUsers);
 /**
@@ -243,9 +242,9 @@ routes.post("/", createUsers);
  *                properties:
  *                  description:
  *                    type: string
- *                    example: Successfully updated data! 
- * 
- *      
+ *                    example: Successfully updated data!
+ *
+ *
  */
 routes.patch("/:id", updateUsers);
 /**
@@ -255,7 +254,7 @@ routes.patch("/:id", updateUsers);
  *      tags:
  *        - Users
  *      summary: Remove Users data by id
- *      description: Remove users API  
+ *      description: Remove users API
  *      parameters:
  *        - name: id
  *          in: path
@@ -274,58 +273,31 @@ routes.patch("/:id", updateUsers);
  *                properties:
  *                  description:
  *                    type: string
- *                    example: Successfully updated data!     
- * 
- * 
+ *                    example: Successfully updated data!
+ *
+ *
  */
 routes.delete("/:id", removeUsers);
 
-  /**
-   *  @swagger
-   *  components:
-   *    schemas:
-   *      Users:
-   *        type: object
-   *        properties:
-   *          username:
-   *            type: string
-   *            description: enter your username
-   *            example: andi17x
-   *          password:
-   *            type: string
-   *            description: enter your password
-   *            example: adminpassword12
-   *          email:
-   *            type: string
-   *            description: enter your email
-   *            example: andi@gmail.com
-   */
-
-  /**
-   * @swagger
-   * /api/categories:
-   *  get:
-   *    tags:
-   *      - Categories
-   *    summary: Retrieve a list of categories
-   *    description: Retrieve a list of task froma categories table
-   *    responses:
-   *      200:
-   *        description: A list of categories.
-   *        content: 
-   *          application/json:
-   *            schema:
-   *              type: object
-   *              properties:
-   *                description:
-   *                  type: string
-   *                  example: Successfully fetched all data!
-   *                data:
-   *                  type: array
-   *                  items:
-   *                    $ref: '#/components/schemas/Categories'
-   * 
-   */
-  routes.get("/", findAllCategories);
+/**
+ *  @swagger
+ *  components:
+ *    schemas:
+ *      Users:
+ *        type: object
+ *        properties:
+ *          username:
+ *            type: string
+ *            description: enter your username
+ *            example: andi17x
+ *          password:
+ *            type: string
+ *            description: enter your password
+ *            example: adminpassword12
+ *          email:
+ *            type: string
+ *            description: enter your email
+ *            example: andi@gmail.com
+ */
 
 module.exports = routes;
