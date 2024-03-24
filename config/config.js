@@ -19,11 +19,12 @@ const db = new Sequelize(
   {
     host: process.env.DATABASE_HOST || "localhost",
     dialect: "postgresql",
-    dialectOptions: { 
-      ssl: { 
-        rejectUnauthorized: false, // very important 
-      } 
-    }  }
+    // dialectOptions: { 
+    //   ssl: { 
+    //     rejectUnauthorized: false, // very important 
+    //   } 
+    // } 
+   }
 );
 
 console.log(`NODE_ENV=${process.env.NODE_ENV}`.yellow);

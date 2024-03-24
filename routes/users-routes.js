@@ -8,6 +8,8 @@ const {
   updateUsers,
   removeUsers,
   findUsersByName,
+  findMail,
+  restartPwd
 } = require("../controllers/users-controller");
 
 /**
@@ -139,6 +141,80 @@ routes.get("/:id", findtUsersById);
  *                    example: Successfully found user data!
  */
 routes.post("/login", findUsersByName);
+
+/**
+ * @swagger
+ * /api/users/restart-pwd/{id}:
+ *    post:
+ *      tags:
+ *        - Users
+ *      description: Restart user's password
+ *      summary: Restart user's password
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          required: true
+ *          description: ID of the user
+ *          schema:
+ *            type: integer
+ *            example: 1
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                contraseña:
+ *                  type: string
+ *                  description: New password for the user
+ *                  example: newPassword123
+ *      responses:
+ *        200:
+ *          description: Successfully restarted user's password
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully restarted user's password
+ */
+routes.post("/restart-pwd/:id", restartPwd);
+
+/**
+ * @swagger
+ * /api/users/mail-sent:
+ *    post:
+ *      tags:
+ *        - Users
+ *      description: Get mail API
+ *      summary: Get mail data
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                correoelectronico:
+ *                  type: string
+ *                  description: enter your mail
+ *                  example: correo@correo.com
+ *      responses:
+ *        200:
+ *          description: Successfully found user data
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully found user data!
+ */
+routes.post("/mail-sent", findMail);
 
 /**
  * @swagger

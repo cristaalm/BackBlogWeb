@@ -50,7 +50,7 @@ const swaggerOptions = {
   swaggerDefinition: {
     openapi: "3.0.0",
     info: {
-      title: "Users API",
+      title: "AquaVision API",
       version: "1.0.0",
     },
   },
