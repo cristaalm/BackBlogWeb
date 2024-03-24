@@ -12,6 +12,7 @@ const findAllCategories = AsyncHandler(async (req, res) => {
     data: listaCategorias,
   });
 });
+
 const createCategories = AsyncHandler(async (req, res) => {
   if (!req.body.nombre) {
     res.status(400).json({
