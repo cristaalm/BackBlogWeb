@@ -18,6 +18,11 @@ const createEntradas = AsyncHandler(async (req, res) => {
       description: "Bad request titulo must be filled!",
     });
   }
+  if (!req.body.descripcion) {
+    res.status(400).json({
+      description: "Bad request contenido must be filled!",
+    });
+  }
   if (!req.body.contenido) {
     res.status(400).json({
       description: "Bad request contenido must be filled!",
@@ -33,36 +38,22 @@ const createEntradas = AsyncHandler(async (req, res) => {
       description: "Bad request imgdestacada must be filled!",
     });
   }
-  if (!req.body.imgdestacada) {
-    res.status(400).json({
-      description: "Bad request imgdestacada must be filled!",
-    });
-  }
-  if (!req.body.fechapublicacion) {
-    res.status(400).json({
-      description: "Bad request fechapublicacion must be filled!",
-    });
-  }
   if (!req.body.usuario) {
     res.status(400).json({
       description: "Bad request usuario must be filled!",
-    });
-  }
-  if (!req.body.estatus) {
-    res.status(400).json({
-      description: "Bad request estatus must be filled!",
     });
   }
   var initModels = require("../model/init-models");
   var models = initModels(db);
   const entradas_map = {
     titulo: req.body.titulo,
+    descripcion: req.body.descripcion,
     contenido: req.body.contenido,
     idcategoria: req.body.idcategoria,
     imgdestacada: req.body.imgdestacada,
-    fechapublicacion: req.body.fechapublicacion,
+    fechapublicacion: Date.now(),
     usuario: req.body.usuario,
-    estatus: req.body.estatus,
+    estatus: "Pendiente",
   };
   listaEntradas = await models.entrada.create(entradas_map);
   res.status(200).json({
@@ -78,6 +69,19 @@ const findEntradasById = AsyncHandler(async (req, res) => {
   res.status(200).json({
     description: `Successfully fetch by id: ${req.params.id} user data!`,
     data: listaEntradas,
+  });
+});
+
+const changeStatus = AsyncHandler(async (req, res) => {
+  var initModels = require("../model/init-models");
+  var models = initModels(db);
+  await models.entrada.update(
+    { estatus: "Publicado" },
+    { where: { id: req.params.id } }
+  );
+
+  res.status(200).json({
+    description: `Successfully updated entrada status to "Publicado"!`,
   });
 });
 
@@ -109,4 +113,5 @@ module.exports = {
   findEntradasById,
   updateEntradas,
   removeEntradas,
+  changeStatus
 };

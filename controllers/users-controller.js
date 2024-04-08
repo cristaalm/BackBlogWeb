@@ -77,6 +77,44 @@ const findtUsersById = AsyncHandler(async (req, res) => {
   });
 });
 
+
+const findByUser = AsyncHandler(async (req, res) => {
+  try {
+    if (!req.body.nombreusuario) {
+      return res.status(400).json({
+        description: "Bad request username must be filled!",
+      });
+    }
+
+    var initModels = require("../model/init-models");
+    var models = initModels(db);
+
+    // Buscar un usuario por nombre de usuario y contraseña
+    const usuario = await models.usuario.findOne({
+      where: {
+        nombreusuario: req.body.nombreusuario,
+      },
+    });
+
+    // Verificar si se encontró un usuario
+    if (usuario) {
+      return res.status(200).json({
+        nombre: usuario.nombre,
+        correo: usuario.correoelectronico,
+      });
+    } else {
+      return res.status(200).json({
+        description: "Usuario incorrecta",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      description: "Error al buscar usuario por nombreusuario",
+    });
+  }
+});
+
 const findUsersByName = AsyncHandler(async (req, res) => {
   try {
     if (!req.body.nombreusuario) {
@@ -256,4 +294,5 @@ module.exports = {
   findUsersByName,
   findMail,
   restartPwd,
+  findByUser
 };

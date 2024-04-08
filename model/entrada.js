@@ -13,6 +13,10 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.TEXT,
         allowNull: true,
       },
+      descripcion: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
       contenido: {
         type: DataTypes.TEXT,
         allowNull: true,

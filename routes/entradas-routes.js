@@ -7,6 +7,7 @@ const {
   findEntradasById,
   updateEntradas,
   removeEntradas,
+  changeStatus
 } = require("../controllers/entradas-controller");
 
 /**
@@ -134,6 +135,36 @@ routes.get("/", findAllEntradas);
  *
  */
 routes.get("/:id", findEntradasById);
+
+/**
+ * @swagger
+ * /api/entradas/status/{id}:
+ *    post:
+ *      tags:
+ *        - Entradas
+ *      summary: Update entrada status by ID
+ *      description: Update entrada status to "Publicado" by ID
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          description: ID of the entrada to update
+ *          schema:
+ *            type: integer
+ *            format: int64
+ *      responses:
+ *        200:
+ *          description: Success message
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully updated entrada status to "Publicado"!
+ */
+routes.post("/status/:id", changeStatus);
 
 /**
  * @swagger
