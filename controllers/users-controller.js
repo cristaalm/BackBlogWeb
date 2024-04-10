@@ -98,6 +98,7 @@ const findByUser = AsyncHandler(async (req, res) => {
       return res.status(200).json({
         nombre: usuario.nombre,
         correo: usuario.correoelectronico,
+        rol: usuario.perfil
       });
     } else {
       return res.status(200).json({
@@ -141,6 +142,7 @@ const findUsersByName = AsyncHandler(async (req, res) => {
       return res.status(200).json({
         logged: true,
         description: "Usuario logueado correctamente",
+        // rol: res.,
       });
     } else {
       return res.status(200).json({
