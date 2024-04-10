@@ -17,21 +17,29 @@ const {
  *  @swagger
  *  components:
  *    schemas:
- *      Users:
+ *      Usuarios:
  *        type: object
  *        properties:
- *          username:
+ *          nombreusuario:
  *            type: string
  *            description: enter your username
  *            example: andi17x
- *          password:
+ *          nombre:
  *            type: string
  *            description: enter your password
  *            example: adminpassword12
- *          email:
+ *          correoelectronico:
  *            type: string
  *            description: enter your email
  *            example: andi@gmail.com
+ *          contraseña:
+ *            type: string
+ *            description: enter your password
+ *            example: adminpassword12
+ *          perfil:
+ *            type: string
+ *            description: enter your perfil
+ *            example: administrador
  */
 
 /**
@@ -388,26 +396,5 @@ routes.patch("/:id", updateUsers);
  *
  */
 routes.delete("/:id", removeUsers);
-
-/**
- *  @swagger
- *  components:
- *    schemas:
- *      Users:
- *        type: object
- *        properties:
- *          username:
- *            type: string
- *            description: enter your username
- *            example: andi17x
- *          password:
- *            type: string
- *            description: enter your password
- *            example: adminpassword12
- *          email:
- *            type: string
- *            description: enter your email
- *            example: andi@gmail.com
- */
 
 module.exports = routes;

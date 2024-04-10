@@ -6,7 +6,6 @@ const nodemailer = require("nodemailer");
 const findAllUsers = AsyncHandler(async (req, res) => {
   var initModels = require("../model/init-models");
   // var models = initModels(db);
-  // listaUsuarios = await models.usuario.findAll();
   const rawQuery = `
     SELECT id, nombreusuario, nombre, correoelectronico,contraseña, perfil,(select count(*) from entrada where upper(usuario)=upper(nombreusuario)) as entradas
     FROM usuario 
@@ -21,6 +20,17 @@ const findAllUsers = AsyncHandler(async (req, res) => {
     data: listaUsuarios,
   });
 });
+
+// const findAllCategories = AsyncHandler(async (req, res) => {
+//   var initModels = require("../model/init-models");
+//   var models = initModels(db);
+//   listaCategorias = await models.categoria.findAll();
+
+//   res.status(200).json({
+//     description: "Successsfully fetched users data!",
+//     data: listaCategorias,
+//   });
+// });
 
 const createUsers = AsyncHandler(async (req, res) => {
   if (!req.body.nombreusuario) {
@@ -73,7 +83,6 @@ const findtUsersById = AsyncHandler(async (req, res) => {
     data: listaUsuarios,
   });
 });
-
 
 const findByUser = AsyncHandler(async (req, res) => {
   try {
@@ -187,7 +196,7 @@ const restartPwd = AsyncHandler(async (req, res) => {
   }
 });
 
-const findMail = (async (req, res) => {
+const findMail = async (req, res) => {
   try {
     if (!req.body.correoelectronico) {
       return res.status(400).json({
@@ -243,7 +252,7 @@ const findMail = (async (req, res) => {
       return res.status(200).json({
         logged: true,
         description: "Email sent successfully",
-        mail:req.body.correoelectronico
+        mail: req.body.correoelectronico,
       });
     } else {
       return res.status(200).json({
@@ -257,7 +266,7 @@ const findMail = (async (req, res) => {
       description: "Error al buscar correo electrónico",
     });
   }
-});
+};
 
 const updateUsers = AsyncHandler(async (req, res) => {
   var initModels = require("../model/init-models");
@@ -291,5 +300,5 @@ module.exports = {
   findUsersByName,
   findMail,
   restartPwd,
-  findByUser
+  findByUser,
 };

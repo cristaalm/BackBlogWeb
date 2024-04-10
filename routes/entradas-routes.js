@@ -21,6 +21,10 @@ const {
  *            type: string
  *            description: ingresar titulo
  *            example: titulo
+ *          descripcion:
+ *            type: string
+ *            description: ingresar titulo
+ *            example: titulo
  *          contenido:
  *            type: string
  *            description: enter your contenido

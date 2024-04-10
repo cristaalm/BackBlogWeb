@@ -7,13 +7,13 @@ const findAllEntradas = AsyncHandler(async (req, res) => {
   // var models = initModels(db);
   // listaEntradas = await models.entrada.findAll();
   const rawQuery = `
-  SELECT id, titulo, contenido, idcategoria,imgdestacada, fechapublicacion,usuario,estatus,descripcion,(select perfil from usuario where upper(nombreusuario)=upper(usuario)) as perfil
-  FROM entrada 
-`;
-// listaUsuarios = await models.usuario.findAll();
-listaEntradas = await db.query(rawQuery, {
-  type: db.QueryTypes.SELECT,
-});
+    SELECT id, titulo, contenido, idcategoria,imgdestacada, fechapublicacion,usuario,estatus,descripcion,(select perfil from usuario where upper(nombreusuario)=upper(usuario)) as perfil
+    FROM entrada 
+  `;
+  // listaUsuarios = await models.usuario.findAll();
+  listaEntradas = await db.query(rawQuery, {
+    type: db.QueryTypes.SELECT,
+  });
 
   res.status(200).json({
     description: "Successsfully fetched entradas data!",
@@ -121,5 +121,5 @@ module.exports = {
   findEntradasById,
   updateEntradas,
   removeEntradas,
-  changeStatus
+  changeStatus,
 };
