@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.json({ message: "Hello from server!" });
 });
-
+app.use(bodyParser.json({ limit: '20mb' }));
 //Set port,listen for request
 const PORT = process.env.PORT || 8080;
 
