@@ -89,7 +89,20 @@ const changeStatus = AsyncHandler(async (req, res) => {
   );
 
   res.status(200).json({
-    description: `Successfully updated entrada status to "Publicado"!`,
+    description: `Successfully updated entrada status to Publicado!`,
+  });
+});
+
+const review = AsyncHandler(async (req, res) => {
+  var initModels = require("../model/init-models");
+  var models = initModels(db);
+  await models.entrada.update(
+    { estatus: "Revisión" },
+    { where: { id: req.params.id } }
+  );
+
+  res.status(200).json({
+    description: `Successfully updated entrada status to Revisión!`,
   });
 });
 
@@ -121,5 +134,6 @@ module.exports = {
   findEntradasById,
   updateEntradas,
   removeEntradas,
-  changeStatus
+  changeStatus,
+  review
 };
