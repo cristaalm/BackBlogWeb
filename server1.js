@@ -15,14 +15,12 @@ const corsOptions = {
 // app.use(cors(corsOptions));
 app.use(cors());
 
-app.use(bodyParser.json({ limit: "50mb" }));
-app.use(
-  bodyParser.urlencoded({
-    limit: "50mb",
-    extended: true,
-    parameterLimit: 50000,
-  })
-);
+// parse requests of content-type - application/json
+app.use(express.json());
+
+// parse request of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+
 // simple router
 app.get("/", (req, res) => {
   res.json({ message: "Welcome" });
