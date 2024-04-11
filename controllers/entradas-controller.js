@@ -7,14 +7,13 @@ const findAllEntradas = AsyncHandler(async (req, res) => {
   // var models = initModels(db);
   // listaEntradas = await models.entrada.findAll();
   const rawQuery = `
-  SELECT id, titulo, contenido, idcategoria,imgdestacada, fechapublicacion,usuario,estatus,descripcion,(select perfil from usuario where upper(nombreusuario)=upper(usuario)) as perfil,
-  (select nombre from usuario where upper(nombreusuario)=upper(usuario)) as nombre
+  SELECT id, titulo, contenido, idcategoria,imgdestacada, fechapublicacion,usuario,estatus,descripcion,(select perfil from usuario where upper(nombreusuario)=upper(usuario)) as perfil
   FROM entrada 
 `;
-// listaUsuarios = await models.usuario.findAll();
-listaEntradas = await db.query(rawQuery, {
-  type: db.QueryTypes.SELECT,
-});
+  // listaUsuarios = await models.usuario.findAll();
+  listaEntradas = await db.query(rawQuery, {
+    type: db.QueryTypes.SELECT,
+  });
 
   res.status(200).json({
     description: "Successsfully fetched entradas data!",
@@ -71,13 +70,27 @@ const createEntradas = AsyncHandler(async (req, res) => {
 });
 
 const findEntradasById = AsyncHandler(async (req, res) => {
-  var initModels = require("../model/init-models");
-  var models = initModels(db);
-  listaEntradas = await models.entrada.findByPk(req.params.id);
-  // console.log("user: ", user)
+  const models = require("../model/init-models")(db);
+  const rawQuery = `
+    SELECT id, titulo, contenido, idcategoria, imgdestacada, fechapublicacion, usuario, estatus, descripcion,
+      (SELECT nombre FROM usuario WHERE upper(nombreusuario) = upper(usuario)) AS nombre
+    FROM entrada
+    WHERE id = :id
+  `;
+  const listaEntradas = await db.query(rawQuery, {
+    type: db.QueryTypes.SELECT,
+    replacements: { id: req.params.id },
+  });
+
+  if (listaEntradas.length === 0) {
+    return res.status(404).json({
+      description: `Entry with id ${req.params.id} not found.`,
+    });
+  }
+
   res.status(200).json({
-    description: `Successfully fetch by id: ${req.params.id} user data!`,
-    data: listaEntradas,
+    description: `Successfully fetch by id: ${req.params.id} entry data!`,
+    data: listaEntradas[0],
   });
 });
 
@@ -136,5 +149,5 @@ module.exports = {
   updateEntradas,
   removeEntradas,
   changeStatus,
-  review
+  review,
 };
