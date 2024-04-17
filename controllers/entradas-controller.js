@@ -7,7 +7,7 @@ const findAllEntradas = AsyncHandler(async (req, res) => {
   // var models = initModels(db);
   // listaEntradas = await models.entrada.findAll();
   const rawQuery = `
-  SELECT id, titulo, contenido, idcategoria,imgdestacada, fechapublicacion,usuario,estatus,descripcion,(select perfil from usuario where upper(nombreusuario)=upper(usuario)) as perfil
+  SELECT id, titulo, contenido, idcategoria,imgdestacada, fechapublicacion,usuario,estatus,descripcion,(select perfil from usuario where upper(nombreusuario)=upper(usuario)) as perfil,
   (select nombre from usuario where upper(nombreusuario)=upper(usuario)) as nombre
   FROM entrada 
 `;
@@ -21,6 +21,7 @@ const findAllEntradas = AsyncHandler(async (req, res) => {
     data: listaEntradas,
   });
 });
+
 const createEntradas = AsyncHandler(async (req, res) => {
   if (!req.body.titulo) {
     res.status(400).json({
