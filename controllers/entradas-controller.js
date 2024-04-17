@@ -8,6 +8,7 @@ const findAllEntradas = AsyncHandler(async (req, res) => {
   // listaEntradas = await models.entrada.findAll();
   const rawQuery = `
   SELECT id, titulo, contenido, idcategoria,imgdestacada, fechapublicacion,usuario,estatus,descripcion,(select perfil from usuario where upper(nombreusuario)=upper(usuario)) as perfil
+  (select nombre from usuario where upper(nombreusuario)=upper(usuario)) as nombre
   FROM entrada 
 `;
   // listaUsuarios = await models.usuario.findAll();
