@@ -61,6 +61,7 @@ db.sync()
 app.use("/api/users", require("./routes/users-routes"));
 app.use("/api/categories", require("./routes/categories-routes"));
 app.use("/api/entradas", require("./routes/entradas-routes"));
+app.use("/api/comments", require("./routes/comments-routes"));
 
 // global error handler
 app.use(errorHandler);
