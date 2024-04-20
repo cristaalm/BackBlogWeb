@@ -30,6 +30,10 @@ const {
  *            type: 	integer
  *            description: enter your identrada
  *            example: #
+ *          fechacreacion:
+ *            type: date
+ *            description: enter your fechacreacion
+ *            example: 2024-03-12
  */
 
 /**
@@ -90,6 +94,10 @@ routes.get("/", findAllComments);
  *                  type: integer
  *                  description: enter your identrada
  *                  example: 1
+ *                fechacreacion:
+ *                        type: date
+ *                        description: enter your fechacreacion
+ *                        example: 2024-03-12
  *      responses:
  *        200:
  *          description: Successfully created data
@@ -147,10 +155,10 @@ routes.post("/", createComment);
  *                        type: string
  *                        description: Comment description
  *                        example: This is a great post!
- *                      fechaCreacion:
- *                        type: string
- *                        description: fechaCreacion
- *                        example: 12-12-1212
+ *                      fechacreacion:
+ *                        type: date
+ *                        description: enter your fechacreacion
+ *                        example: 2024-03-12
  *
  */
 routes.get("/:identrada", findByPost);

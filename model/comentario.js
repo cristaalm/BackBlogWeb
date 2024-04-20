@@ -25,6 +25,10 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
+      fechacreacion: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+      }
     },
     {
       sequelize,
