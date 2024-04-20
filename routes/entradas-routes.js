@@ -8,7 +8,8 @@ const {
   updateEntradas,
   removeEntradas,
   changeStatus,
-  review
+  review,
+  findByPublish
 } = require("../controllers/entradas-controller");
 
 /**
@@ -356,5 +357,59 @@ routes.patch("/:id", updateEntradas);
  *
  */
 routes.delete("/:id", removeEntradas);
+
+/**
+ * @swagger
+ * /api/entradas/publish:
+ *    get:
+ *      tags:
+ *        - Entradas
+ *      summary: Retrieve published entradas
+ *      description: Retrieve entradas with status 'Publicado' from the database
+ *      responses:
+ *        200:
+ *          description: Comments retrieved successfully.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                items:
+ *                  type: object
+ *                  properties:
+ *                    titulo:
+ *                      type: string
+ *                      description: Title of the comment
+ *                      example: This is a comment title
+ *                    descripcion:
+ *                      type: string
+ *                      description: Description of the comment
+ *                      example: This is a comment description
+ *                    contenido:
+ *                      type: string
+ *                      description: Content of the comment
+ *                      example: This is a comment content
+ *                    idcategoria:
+ *                      type: integer
+ *                      description: ID of the category of the comment
+ *                      example: 1
+ *                    imgdestacada:
+ *                      type: string
+ *                      description: URL of the featured image of the comment
+ *                      example: http://example.com/image.jpg
+ *                    fechapublicacion:
+ *                      type: string
+ *                      format: date
+ *                      description: Date of publication of the comment
+ *                      example: 2024-04-19
+ *                    usuario:
+ *                      type: string
+ *                      description: User who published the comment
+ *                      example: John Doe
+ *                    estatus:
+ *                      type: string
+ *                      description: Status of the comment
+ *                      example: Publicado
+ */
+routes.get("/publish", findByPublish);
 
 module.exports = routes;

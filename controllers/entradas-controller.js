@@ -96,6 +96,43 @@ const findEntradasById = AsyncHandler(async (req, res) => {
   });
 });
 
+
+const findByPublish = AsyncHandler(async (req, res) => {
+  try {
+    const models = require("../model/init-models")(db);
+    console.log(models.entrada.findAll({ where: { estatus: "Publicado" } }).toString());
+    const entradasPublicadas = await models.entrada.findAll({
+      where: {
+        estatus: "Publicado",
+      },
+    });
+
+    if (entradasPublicadas.length > 0) {
+      const entradas = entradasPublicadas.map((entrada) => ({
+        titulo: entrada.titulo,
+        descripcion: entrada.descripcion,
+        contenido: entrada.contenido,
+        idcategoria: entrada.idcategoria,
+        imgdestacada: entrada.imgdestacada,
+        fechapublicacion: entrada.fechapublicacion,
+        usuario: entrada.usuario,
+        estatus: entrada.estatus,
+      }));
+      return res.status(200).json(entradas);
+    } else {
+      return res.status(404).json({
+        description: "No entries found with status 'Publicado'.",
+      });
+    }
+  } catch (error) {
+    console.error("Error searching for published entries:", error);
+    return res.status(500).json({
+      description: "Error searching for published entries.",
+    });
+  }
+});
+
+
 const changeStatus = AsyncHandler(async (req, res) => {
   var initModels = require("../model/init-models");
   var models = initModels(db);
@@ -152,4 +189,5 @@ module.exports = {
   removeEntradas,
   changeStatus,
   review,
+  findByPublish
 };

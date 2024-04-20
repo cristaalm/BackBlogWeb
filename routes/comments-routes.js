@@ -27,7 +27,7 @@ const {
  *            description: enter your descripcion
  *            example: descripcion
  *          identrada:
- *            type: 	integer
+ *            type: integer
  *            description: enter your identrada
  *            example: #
  *          fechacreacion:
@@ -95,9 +95,9 @@ routes.get("/", findAllComments);
  *                  description: enter your identrada
  *                  example: 1
  *                fechacreacion:
- *                        type: date
- *                        description: enter your fechacreacion
- *                        example: 2024-03-12
+ *                  type: date
+ *                  description: enter your fechacreacion
+ *                  example: 2024-03-12
  *      responses:
  *        200:
  *          description: Successfully created data

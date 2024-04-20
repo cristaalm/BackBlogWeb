@@ -1,5 +1,5 @@
 const AsyncHandler = require("express-async-handler");
-const Users = require("../model/comentario");
+// const Users = require("../model/comentario");
 const db = require("../config/config");
 // const nodemailer = require("nodemailer");
 
@@ -16,17 +16,17 @@ const findAllComments = AsyncHandler(async (req, res) => {
 
 const createComment = AsyncHandler(async (req, res) => {
   if (!req.body.nombre) {
-    res.status(400).json({
+    return res.status(400).json({
       description: "Bad request nombre must be filled!",
     });
   }
   if (!req.body.valoracion) {
-    res.status(400).json({
+    return res.status(400).json({
       description: "Bad request valoracion must be filled!",
     });
   }
   if (!req.body.descripcion) {
-    res.status(400).json({
+    return res.status(400).json({
       description: "Bad request email must be filled!",
     });
   }
@@ -38,9 +38,10 @@ const createComment = AsyncHandler(async (req, res) => {
     valoracion: req.body.valoracion,
     descripcion: req.body.descripcion,
     identrada: req.body.identrada,
+    fechacreacion: Date.now(),
   };
   listaComentarios = await models.comentario.create(comments_map);
-  res.status(200).json({
+  return res.status(200).json({
     description: "Successfully saved user data!",
   });
 });
@@ -49,7 +50,7 @@ const findByPost = AsyncHandler(async (req, res) => {
   try {
     if (!req.params.identrada) {
       return res.status(400).json({
-        description: "Bad request, identrada must be provided in the URL.",
+        description: "Bad request identrada must be filled!",
       });
     }
 
@@ -69,7 +70,8 @@ const findByPost = AsyncHandler(async (req, res) => {
         valoracion: comentario.valoracion,
         descripcion: comentario.descripcion,
         identrada: comentario.identrada,
-        fechacreacion: Date.now(),
+        fechacreacion: comentario.fechacreacion,
+        // fechacreacion: new Date(comentario.fechacreacion).toISOString(), // Format date to ISO string
       }));
       return res.status(200).json(comentariosData);
     } else {
@@ -80,7 +82,7 @@ const findByPost = AsyncHandler(async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({
-      description: "Error retrieving comments by idEntrada.",
+      description: "Error al buscar usuario por identrada",
     });
   }
 });
