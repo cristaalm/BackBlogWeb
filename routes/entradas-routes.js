@@ -361,55 +361,59 @@ routes.delete("/:id", removeEntradas);
 /**
  * @swagger
  * /api/entradas/publish:
- *    get:
+ *    post:
  *      tags:
  *        - Entradas
  *      summary: Retrieve published entradas
  *      description: Retrieve entradas with status 'Publicado' from the database
  *      responses:
  *        200:
- *          description: Comments retrieved successfully.
+ *          description: Entradas retrieved successfully
  *          content:
  *            application/json:
  *              schema:
- *                type: object
+ *                type: array
  *                items:
  *                  type: object
  *                  properties:
  *                    titulo:
  *                      type: string
- *                      description: Title of the comment
- *                      example: This is a comment title
+ *                      description: Title of the entrada
+ *                      example: "Titulo de la entrada"
  *                    descripcion:
  *                      type: string
- *                      description: Description of the comment
- *                      example: This is a comment description
+ *                      description: Description of the entrada
+ *                      example: "Descripción de la entrada"
  *                    contenido:
  *                      type: string
- *                      description: Content of the comment
- *                      example: This is a comment content
+ *                      description: Content of the entrada
+ *                      example: "Contenido de la entrada"
  *                    idcategoria:
  *                      type: integer
- *                      description: ID of the category of the comment
+ *                      description: ID of the category of the entrada
  *                      example: 1
  *                    imgdestacada:
  *                      type: string
- *                      description: URL of the featured image of the comment
+ *                      description: URL of the featured image of the entrada
  *                      example: http://example.com/image.jpg
  *                    fechapublicacion:
  *                      type: string
  *                      format: date
- *                      description: Date of publication of the comment
+ *                      description: Date of publication of the entrada
  *                      example: 2024-04-19
  *                    usuario:
  *                      type: string
- *                      description: User who published the comment
+ *                      description: User who published the entrada
  *                      example: John Doe
  *                    estatus:
  *                      type: string
- *                      description: Status of the comment
+ *                      description: Status of the entrada
  *                      example: Publicado
+ *        404:
+ *          description: No entries found with status 'Publicado'
+ *        500:
+ *          description: Error searching for published entries
  */
-routes.get("/publish", findByPublish);
+routes.post("/publish", findByPublish);
 
 module.exports = routes;

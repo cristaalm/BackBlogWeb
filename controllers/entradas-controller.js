@@ -100,7 +100,6 @@ const findEntradasById = AsyncHandler(async (req, res) => {
 const findByPublish = AsyncHandler(async (req, res) => {
   try {
     const models = require("../model/init-models")(db);
-    console.log(models.entrada.findAll({ where: { estatus: "Publicado" } }).toString());
     const entradasPublicadas = await models.entrada.findAll({
       where: {
         estatus: "Publicado",
