@@ -147,6 +147,10 @@ routes.post("/", createComment);
  *                        type: string
  *                        description: Comment description
  *                        example: This is a great post!
+ *                      fechaCreacion:
+ *                        type: string
+ *                        description: fechaCreacion
+ *                        example: 12-12-1212
  *
  */
 routes.get("/:identrada", findByPost);

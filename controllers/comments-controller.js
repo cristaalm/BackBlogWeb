@@ -69,6 +69,7 @@ const findByPost = AsyncHandler(async (req, res) => {
         valoracion: comentario.valoracion,
         descripcion: comentario.descripcion,
         identrada: comentario.identrada,
+        fechacreacion: Date.now(),
       }));
       return res.status(200).json(comentariosData);
     } else {
