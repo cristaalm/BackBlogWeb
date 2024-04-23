@@ -71,6 +71,37 @@ const createEntradas = AsyncHandler(async (req, res) => {
   });
 });
 
+const findEntradasByCategoryId = AsyncHandler(async (req, res) => {
+  try {
+    const rawQuery = `
+    SELECT id, titulo, contenido, idcategoria, imgdestacada, fechapublicacion, usuario, estatus, descripcion,
+    (SELECT nombre FROM usuario WHERE upper(nombreusuario) = upper(usuario)) AS nombre,
+    (SELECT color FROM categoria WHERE id = idcategoria) AS color,
+    (SELECT descripcion FROM categoria WHERE id = idcategoria) AS descripcionCategoria,
+    (SELECT nombre FROM categoria WHERE id = idcategoria) AS nombreCategoria
+  FROM entrada
+  WHERE estatus = 'Publicado' AND idcategoria=:idCategory
+    `;
+    const listaEntradas = await db.query(rawQuery, {
+      type: db.QueryTypes.SELECT,
+      replacements: { idCategory: req.params.idCategoria },
+    });
+
+    if (listaEntradas.length > 0) {
+      return res.status(200).json(listaEntradas);
+    } else {
+      return res.status(404).json({
+        description: "No entries found with status idCategory.",
+      });
+    }
+  } catch (error) {
+    console.error("Error searching for published entries:", error);
+    return res.status(500).json({
+      description: "Error 500",
+    });
+  }
+});
+
 const findEntradasById = AsyncHandler(async (req, res) => {
   const models = require("../model/init-models")(db);
   const rawQuery = `
@@ -99,25 +130,18 @@ const findEntradasById = AsyncHandler(async (req, res) => {
 
 const findByPublish = AsyncHandler(async (req, res) => {
   try {
-    const models = require("../model/init-models")(db);
-    const entradasPublicadas = await models.entrada.findAll({
-      where: {
-        estatus: "Publicado",
-      },
+    const rawQuery = `
+    SELECT id, titulo, contenido, idcategoria, imgdestacada, fechapublicacion, usuario, estatus, descripcion,
+    (SELECT nombre FROM usuario WHERE upper(nombreusuario) = upper(usuario)) AS nombre
+  FROM entrada  
+  WHERE estatus = 'Publicado'
+    `;
+    const listaEntradas = await db.query(rawQuery, {
+      type: db.QueryTypes.SELECT,
     });
 
-    if (entradasPublicadas.length > 0) {
-      const entradas = entradasPublicadas.map((entrada) => ({
-        titulo: entrada.titulo,
-        descripcion: entrada.descripcion,
-        contenido: entrada.contenido,
-        idcategoria: entrada.idcategoria,
-        imgdestacada: entrada.imgdestacada,
-        fechapublicacion: entrada.fechapublicacion,
-        usuario: entrada.usuario,
-        estatus: entrada.estatus,
-      }));
-      return res.status(200).json(entradas);
+    if (listaEntradas.length > 0) {
+      return res.status(200).json(listaEntradas);
     } else {
       return res.status(404).json({
         description: "No entries found with status 'Publicado'.",
@@ -130,7 +154,6 @@ const findByPublish = AsyncHandler(async (req, res) => {
     });
   }
 });
-
 
 const changeStatus = AsyncHandler(async (req, res) => {
   var initModels = require("../model/init-models");
@@ -183,10 +206,11 @@ const removeEntradas = AsyncHandler(async (req, res) => {
 module.exports = {
   findAllEntradas,
   createEntradas,
-  findEntradasById,
+  findEntradasByCategoryId,
   updateEntradas,
   removeEntradas,
   changeStatus,
   review,
-  findByPublish
+  findEntradasById,
+  findByPublish,
 };

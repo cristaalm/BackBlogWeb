@@ -2,10 +2,37 @@ const AsyncHandler = require("express-async-handler");
 const Categories = require("../model/categoria");
 const db = require("../config/config");
 
+// const findAllCategories = AsyncHandler(async (req, res) => {
+//   var initModels = require("../model/init-models");
+//   var models = initModels(db);
+//   listaCategorias = await models.categoria.findAll();
+
+//   res.status(200).json({
+//     description: "Successsfully fetched categories data!",
+//     data: listaCategorias,
+//   });
+// });
+
 const findAllCategories = AsyncHandler(async (req, res) => {
   var initModels = require("../model/init-models");
-  var models = initModels(db);
-  listaCategorias = await models.categoria.findAll();
+  const rawQuery = `
+  SELECT
+  id,
+  nombre,
+  descripcion,
+  imgdestacada,
+  color,
+  (
+    SELECT COUNT(*)
+    FROM entrada
+    WHERE idcategoria = categoria.id AND estatus = 'Publicado'
+  ) AS entradas
+FROM
+  categoria`;
+  // listaCategorias = await models.categoria.findAll();
+  listaCategorias = await db.query(rawQuery, {
+    type: db.QueryTypes.SELECT,
+  });
 
   res.status(200).json({
     description: "Successsfully fetched categories data!",

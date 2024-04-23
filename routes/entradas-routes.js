@@ -4,12 +4,13 @@ const routes = Express.Router();
 const {
   findAllEntradas,
   createEntradas,
-  findEntradasById,
+  findEntradasByCategoryId,
   updateEntradas,
   removeEntradas,
   changeStatus,
   review,
-  findByPublish
+  findByPublish,
+  findEntradasById
 } = require("../controllers/entradas-controller");
 
 /**
@@ -80,67 +81,7 @@ const {
  */
 routes.get("/", findAllEntradas);
 
-/**
- * @swagger
- * /api/entradas/{id}:
- *    get:
- *      tags:
- *        - Entradas
- *      summary: Retrieve entradas data by id
- *      description: Retrieve entradas by id from entradas table
- *      parameters:
- *        - name: id
- *          in: path
- *          required: true
- *          description: user id
- *          schema:
- *            type: integer
- *            format: int64
- *      responses:
- *        200:
- *          description: single entrada data.
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  description:
- *                    type: string
- *                    example: Successfully fetched entradas data by id!
- *                  data:
- *                    type: object
- *                    properties:
- *                      titulo:
- *                        type: string
- *                        description: ingresar titulo
- *                        example: titulo
- *                      contenido:
- *                        type: string
- *                        description: enter your contenido
- *                        example: contenido
- *                      idcategoria:
- *                        type: integer
- *                        description: enter your idcategoria
- *                        example: 1
- *                      imgdestacada:
- *                        type: string
- *                        description: enter your imgdestacada
- *                        example: imgdestacada
- *                      fechapublicacion:
- *                        type: date
- *                        description: enter your fechapublicacion
- *                        example: 2024-03-12
- *                      usuario:
- *                        type: string
- *                        description: enter your usuario
- *                        example: usuario
- *                      estatus:
- *                        type: string
- *                        description: enter your estatus
- *                        example: estatus
- *
- */
-routes.get("/:id", findEntradasById);
+
 
 /**
  * @swagger
@@ -415,5 +356,135 @@ routes.delete("/:id", removeEntradas);
  *          description: Error searching for published entries
  */
 routes.post("/publish", findByPublish);
+
+/**
+ * @swagger
+ * /api/entradas/bycategory/{idCategoria}:
+ *  get:
+ *    tags:
+ *      - Entradas
+ *    summary: Retrieve entradas by category ID
+ *    description: Retrieve entradas filtered by the specified category ID
+ *    parameters:
+ *      - in: path
+ *        name: idCategoria
+ *        schema:
+ *          type: integer
+ *        required: true
+ *        description: ID of the category to filter entradas by
+ *    responses:
+ *      200:
+ *        description: A list of entradas filtered by category ID
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                description:
+ *                  type: string
+ *                  example: Successfully fetched entradas data by category ID!
+ *                data:
+ *                  type: array
+ *                items:
+ *                  type: object
+ *                  properties:
+ *                    titulo:
+ *                      type: string
+ *                      description: Title of the entrada
+ *                      example: "Titulo de la entrada"
+ *                    descripcion:
+ *                      type: string
+ *                      description: Description of the entrada
+ *                      example: "Descripción de la entrada"
+ *                    contenido:
+ *                      type: string
+ *                      description: Content of the entrada
+ *                      example: "Contenido de la entrada"
+ *                    idcategoria:
+ *                      type: integer
+ *                      description: ID of the category of the entrada
+ *                      example: 1
+ *                    imgdestacada:
+ *                      type: string
+ *                      description: URL of the featured image of the entrada
+ *                      example: http://example.com/image.jpg
+ *                    fechapublicacion:
+ *                      type: string
+ *                      format: date
+ *                      description: Date of publication of the entrada
+ *                      example: 2024-04-19
+ *                    usuario:
+ *                      type: string
+ *                      description: User who published the entrada
+ *                      example: John Doe
+ *                    estatus:
+ *                      type: string
+ *                      description: Status of the entrada
+ *                      example: Publicado
+ */
+
+routes.get("/bycategory/:idCategoria", findEntradasByCategoryId);
+
+/**
+ * @swagger
+ * /api/entradas/{id}:
+ *    get:
+ *      tags:
+ *        - Entradas
+ *      summary: Retrieve entradas data by id
+ *      description: Retrieve entradas by id from entradas table
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          description: user id
+ *          schema:
+ *            type: integer
+ *            format: int64
+ *      responses:
+ *        200:
+ *          description: single entrada data.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully fetched entradas data by id!
+ *                  data:
+ *                    type: object
+ *                    properties:
+ *                      titulo:
+ *                        type: string
+ *                        description: ingresar titulo
+ *                        example: titulo
+ *                      contenido:
+ *                        type: string
+ *                        description: enter your contenido
+ *                        example: contenido
+ *                      idcategoria:
+ *                        type: integer
+ *                        description: enter your idcategoria
+ *                        example: 1
+ *                      imgdestacada:
+ *                        type: string
+ *                        description: enter your imgdestacada
+ *                        example: imgdestacada
+ *                      fechapublicacion:
+ *                        type: date
+ *                        description: enter your fechapublicacion
+ *                        example: 2024-03-12
+ *                      usuario:
+ *                        type: string
+ *                        description: enter your usuario
+ *                        example: usuario
+ *                      estatus:
+ *                        type: string
+ *                        description: enter your estatus
+ *                        example: estatus
+ *
+ */
+routes.get("/:id", findEntradasById);
 
 module.exports = routes;
