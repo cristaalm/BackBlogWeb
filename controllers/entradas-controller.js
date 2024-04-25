@@ -2,6 +2,8 @@ const AsyncHandler = require("express-async-handler");
 const Entradas = require("../model/entrada");
 const db = require("../config/config");
 const moment = require("moment-timezone");
+const nodemailer = require("nodemailer");
+
 const findAllEntradas = AsyncHandler(async (req, res) => {
   // var initModels = require("../model/init-models");
   // var models = initModels(db);
@@ -172,11 +174,54 @@ const changeStatus = AsyncHandler(async (req, res) => {
 const review = AsyncHandler(async (req, res) => {
   var initModels = require("../model/init-models");
   var models = initModels(db);
+
+  const rawQuery = `
+    SELECT id, titulo, contenido, idcategoria, imgdestacada, fechapublicacion, usuario, estatus, descripcion,
+      (SELECT nombre FROM usuario WHERE upper(nombreusuario) = upper(usuario)) AS nombre,
+      (SELECT correoelectronico FROM usuario WHERE upper(nombreusuario) = upper(usuario)) AS correoelectronico
+    FROM entrada
+    WHERE id = :id
+  `;
+  const listaEntradas = await db.query(rawQuery, {
+    type: db.QueryTypes.SELECT,
+    replacements: { id: req.params.id },
+  });
+
+  if (listaEntradas.length === 0) {
+    return res.status(404).json({ error: "Article not found" });
+  }
+
+  const correo = listaEntradas[0].correoelectronico; // Select the first entry from the result
+  console.log(correo);
   await models.entrada.update(
     { estatus: "Revisión" },
     { where: { id: req.params.id } }
-  );
+  ); // Update the status of the article
 
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: "aquavisionotification@gmail.com",
+      pass: "lsve btbq rhcl wpvs",
+    },
+  });
+  const info = await transporter.sendMail({
+    from: correo, // Use correoelectronico as the from address
+    to: "aquavisionotification@gmail.com",
+    subject: "Review Blog Post",
+    html: `
+      <h3>Hi!</h3>
+      <p>
+        I'm <strong>${listaEntradas[0].nombre}</strong>. I have finished my article, please review it so you can publish it. I am eager to share it, it's cool: <strong><i>${listaEntradas[0].titulo}</i></strong>
+      </p>
+      <p><i>The Umizoomis Company Team </i></p>
+      <p><i>Editor Profile </i></p>
+    `,
+  });
+
+  console.log("Message sent: %s", info.messageId);
   res.status(200).json({
     description: `Successfully updated entrada status to Revisión!`,
   });

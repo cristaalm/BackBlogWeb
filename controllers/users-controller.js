@@ -129,12 +129,15 @@ const changeTour = AsyncHandler(async (req, res) => {
 
 const findUsersByName = AsyncHandler(async (req, res) => {
   try {
-    if (!req.body.nombreusuario) {
+    const nombreusuario = req.body.nombreusuario.trim();
+    const contraseña = req.body.contraseña.trim();
+
+    if (!nombreusuario) {
       return res.status(400).json({
         description: "Bad request username must be filled!",
       });
     }
-    if (!req.body.contraseña) {
+    if (!contraseña) {
       return res.status(400).json({
         description: "Bad request password must be filled!",
       });
@@ -146,8 +149,8 @@ const findUsersByName = AsyncHandler(async (req, res) => {
     // Buscar un usuario por nombre de usuario y contraseña
     const usuario = await models.usuario.findOne({
       where: {
-        nombreusuario: req.body.nombreusuario,
-        contraseña: req.body.contraseña,
+        nombreusuario: nombreusuario,
+        contraseña: contraseña,
       },
     });
 
