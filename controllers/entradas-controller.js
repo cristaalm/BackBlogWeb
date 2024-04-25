@@ -1,7 +1,7 @@
 const AsyncHandler = require("express-async-handler");
 const Entradas = require("../model/entrada");
 const db = require("../config/config");
-
+const moment = require("moment-timezone");
 const findAllEntradas = AsyncHandler(async (req, res) => {
   // var initModels = require("../model/init-models");
   // var models = initModels(db);
@@ -61,7 +61,7 @@ const createEntradas = AsyncHandler(async (req, res) => {
     contenido: req.body.contenido,
     idcategoria: req.body.idcategoria,
     imgdestacada: req.body.imgdestacada,
-    fechapublicacion: Date.now(),
+    fechapublicacion: moment.tz("America/Mexico_City"),
     usuario: req.body.usuario,
     estatus: "Pendiente",
   };

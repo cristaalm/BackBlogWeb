@@ -74,7 +74,6 @@ const findtUsersById = AsyncHandler(async (req, res) => {
   });
 });
 
-
 const findByUser = AsyncHandler(async (req, res) => {
   try {
     if (!req.body.nombreusuario) {
@@ -95,10 +94,12 @@ const findByUser = AsyncHandler(async (req, res) => {
 
     // Verificar si se encontró un usuario
     if (usuario) {
+      console.log(usuario);
       return res.status(200).json({
         nombre: usuario.nombre,
         correo: usuario.correoelectronico,
-        rol: usuario.perfil
+        rol: usuario.perfil,
+        tour: usuario.tour,
       });
     } else {
       return res.status(200).json({
@@ -111,6 +112,19 @@ const findByUser = AsyncHandler(async (req, res) => {
       description: "Error al buscar usuario por nombreusuario",
     });
   }
+});
+
+const changeTour = AsyncHandler(async (req, res) => {
+  var initModels = require("../model/init-models");
+  var models = initModels(db);
+  await models.usuario.update(
+    { tour: true },
+    { where: { nombreusuario: req.body.nombreusuario } }
+  );
+
+  res.status(200).json({
+    description: `Successfully updated tour to true!`,
+  });
 });
 
 const findUsersByName = AsyncHandler(async (req, res) => {
@@ -189,7 +203,7 @@ const restartPwd = AsyncHandler(async (req, res) => {
   }
 });
 
-const findMail = (async (req, res) => {
+const findMail = async (req, res) => {
   try {
     if (!req.body.correoelectronico) {
       return res.status(400).json({
@@ -245,7 +259,7 @@ const findMail = (async (req, res) => {
       return res.status(200).json({
         logged: true,
         description: "Email sent successfully",
-        mail:req.body.correoelectronico
+        mail: req.body.correoelectronico,
       });
     } else {
       return res.status(200).json({
@@ -259,7 +273,7 @@ const findMail = (async (req, res) => {
       description: "Error al buscar correo electrónico",
     });
   }
-});
+};
 
 const updateUsers = AsyncHandler(async (req, res) => {
   var initModels = require("../model/init-models");
@@ -293,5 +307,6 @@ module.exports = {
   findUsersByName,
   findMail,
   restartPwd,
-  findByUser
+  findByUser,
+  changeTour
 };

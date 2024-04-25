@@ -10,7 +10,8 @@ const {
   findUsersByName,
   findMail,
   restartPwd,
-  findByUser
+  findByUser,
+  changeTour
 } = require("../controllers/users-controller");
 
 /**
@@ -40,6 +41,9 @@ const {
  *            type: string
  *            description: enter your perfil
  *            example: administrador
+ *          tour:
+ *            type:boolean 
+ * 
  */
 
 /**
@@ -146,6 +150,39 @@ routes.get("/:id", findtUsersById);
  *
  */
 routes.post("/find-user", findByUser);
+
+/**
+ * @swagger
+ * /api/users/change-tour:
+ *    post:
+ *      tags:
+ *        - Users
+ *      summary: Get users data
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                nombreusuario:
+ *                  type: string
+ *                  description: enter your nombreusuario
+ *                  example: andi17x
+ *      responses:
+ *        200:
+ *          description: Successfully found user data
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully found user data!
+ *
+ */
+routes.post("/change-tour", changeTour);
 
 /**
  * @swagger

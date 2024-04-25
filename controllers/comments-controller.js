@@ -2,7 +2,7 @@ const AsyncHandler = require("express-async-handler");
 // const Users = require("../model/comentario");
 const db = require("../config/config");
 // const nodemailer = require("nodemailer");
-
+const moment = require("moment-timezone");
 const findAllComments = AsyncHandler(async (req, res) => {
   var initModels = require("../model/init-models");
   var models = initModels(db);
@@ -38,7 +38,7 @@ const createComment = AsyncHandler(async (req, res) => {
     valoracion: req.body.valoracion,
     descripcion: req.body.descripcion,
     identrada: req.body.identrada,
-    fechacreacion: Date.now(),
+    fechacreacion: moment.tz("America/Mexico_City"),
   };
   listaComentarios = await models.comentario.create(comments_map);
   return res.status(200).json({
