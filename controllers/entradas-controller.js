@@ -127,13 +127,14 @@ const findEntradasById = AsyncHandler(async (req, res) => {
   });
 });
 
-
 const findByPublish = AsyncHandler(async (req, res) => {
   try {
     const rawQuery = `
     SELECT id, titulo, contenido, idcategoria, imgdestacada, fechapublicacion, usuario, estatus, descripcion,
-    (SELECT nombre FROM usuario WHERE upper(nombreusuario) = upper(usuario)) AS nombre
-  FROM entrada  
+    (SELECT nombre FROM usuario WHERE upper(nombreusuario) = upper(usuario)) AS nombre,
+    (SELECT color FROM categoria WHERE id = idcategoria) AS color,
+    (SELECT descripcion FROM categoria WHERE id = idcategoria) AS descripcionCategoria,
+    (SELECT nombre FROM categoria WHERE id = idcategoria) AS nombreCategoria  FROM entrada  
   WHERE estatus = 'Publicado'
     `;
     const listaEntradas = await db.query(rawQuery, {
