@@ -2,6 +2,7 @@ const AsyncHandler = require("express-async-handler");
 const Users = require("../model/usuario");
 const db = require("../config/config");
 const nodemailer = require("nodemailer");
+const crypto = require("crypto");
 
 const findAllUsers = AsyncHandler(async (req, res) => {
   var initModels = require("../model/init-models");
@@ -226,6 +227,17 @@ const findMail = async (req, res) => {
 
     // Verificar si se encontró un usuario
     if (usuario) {
+      // Establecer la fecha de expiración del token en 10 minutos
+      const fecheHora = new Date();
+      fecheHora.setMinutes(fecheHora.getMinutes() + 10);
+
+      // Actualizar la fecha de expiración del token en la base de datos
+      await usuario.update({ fechatoken: fecheHora.toISOString() }); // Guardar la fecha como string ISO
+
+      // Encriptar el ID del usuario
+      const key = 'your_secret_key_for_encryption'; // Define tu clave secreta aquí
+      const encryptedId = encrypt(usuario.id.toString(), key);
+
       const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 465,
@@ -246,7 +258,7 @@ const findMail = async (req, res) => {
           No problem, you can reset your AquaVision password by clicking the
           following link:
         </p>
-        <a href="http://localhost:5173/restart-psswd/${usuario.id}">Reset password</a>
+        <a href="http://localhost:5173/restart-psswd/${encryptedId}">Reset password</a>
         <p>Your username is: ${usuario.nombreusuario}</p>
         <p>
           If you did not request a password reset, you can delete this email and
@@ -277,6 +289,15 @@ const findMail = async (req, res) => {
     });
   }
 };
+
+
+// AES encryption function
+function encrypt(text, key) {
+  const cipher = crypto.createCipher('aes-256-cbc', key);
+  let encrypted = cipher.update(text, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+  return encrypted;
+}
 
 const updateUsers = AsyncHandler(async (req, res) => {
   var initModels = require("../model/init-models");
@@ -311,5 +332,5 @@ module.exports = {
   findMail,
   restartPwd,
   findByUser,
-  changeTour
+  changeTour,
 };
