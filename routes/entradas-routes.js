@@ -10,7 +10,8 @@ const {
   changeStatus,
   review,
   findByPublish,
-  findEntradasById
+  findEntradasById,
+  findEntradas
 } = require("../controllers/entradas-controller");
 
 /**
@@ -80,7 +81,32 @@ const {
  *
  */
 routes.get("/", findAllEntradas);
-
+/**
+ * @swagger
+ * /api/entradas/text:
+ *  get:
+ *    tags:
+ *      - Entradas
+ *    summary: Retrieve a list of entradas
+ *    description: Retrieve a list of task froma entradas table
+ *    responses:
+ *      200:
+ *        description: A list of entradas.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                description:
+ *                  type: string
+ *                  example: Successfully fetched all data!
+ *                data:
+ *                  type: array
+ *                  items:
+ *                    $ref: '#/components/schemas/Entradas'
+ *
+ */
+routes.get("/text", findEntradas);
 
 
 /**

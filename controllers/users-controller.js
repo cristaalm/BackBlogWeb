@@ -3,7 +3,7 @@ const Users = require("../model/usuario");
 const db = require("../config/config");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
-
+const moment = require("moment-timezone");
 const findAllUsers = AsyncHandler(async (req, res) => {
   var initModels = require("../model/init-models");
   // var models = initModels(db);
@@ -180,11 +180,12 @@ const restartPwd = AsyncHandler(async (req, res) => {
   try {
     var initModels = require("../model/init-models");
     var models = initModels(db);
-
+    const key = "your_secret_key_for_encryption";
     const userId = req.params.id;
-
+    console.log(userId);
+    const userIdDecrypted = decrypt(userId.toString(), key);
     // Buscar un usuario por ID
-    const usuario = await models.usuario.findByPk(userId);
+    const usuario = await models.usuario.findByPk(userIdDecrypted);
 
     // Verificar si se encontró un usuario
     if (!usuario) {
@@ -192,9 +193,22 @@ const restartPwd = AsyncHandler(async (req, res) => {
         description: "User not found",
       });
     }
-
+    let dateString = usuario.fechatoken;
+    console.log(dateString);
+    if (!dateString || dateString === null) {
+      return res.status(400).json({
+        description: "token is invalid or used",
+      });
+    }
+    let fechaToken = moment(dateString, "ddd MMM DD YYYY HH:mm:ss [GMT]ZZ");
+    let date = moment.tz("America/Mexico_City");
+    if (date.isAfter(fechaToken)) {
+      return res.status(400).json({
+        description: "Token expired",
+      });
+    }
     // Actualizar la contraseña del usuario
-    await usuario.update({ contraseña: req.body.contraseña });
+    await usuario.update({ contraseña: req.body.contraseña, fechatoken: null });
 
     return res.status(200).json({
       description: "Successfully restarted user's password",
@@ -228,14 +242,15 @@ const findMail = async (req, res) => {
     // Verificar si se encontró un usuario
     if (usuario) {
       // Establecer la fecha de expiración del token en 10 minutos
-      const fecheHora = new Date();
-      fecheHora.setMinutes(fecheHora.getMinutes() + 10);
-
+      let date = moment.tz("America/Mexico_City");
+      // fecheHora.setMinutes(fecheHora.getMinutes() + 10);
+      date.add(10, "minutes");
+      console.log(date);
       // Actualizar la fecha de expiración del token en la base de datos
-      await usuario.update({ fechatoken: fecheHora.toISOString() }); // Guardar la fecha como string ISO
+      await usuario.update({ fechatoken: date.toString() }); // Guardar la fecha como string ISO
 
       // Encriptar el ID del usuario
-      const key = 'your_secret_key_for_encryption'; // Define tu clave secreta aquí
+      const key = "your_secret_key_for_encryption"; // Define tu clave secreta aquí
       const encryptedId = encrypt(usuario.id.toString(), key);
 
       const transporter = nodemailer.createTransport({
@@ -290,15 +305,20 @@ const findMail = async (req, res) => {
   }
 };
 
-
 // AES encryption function
 function encrypt(text, key) {
-  const cipher = crypto.createCipher('aes-256-cbc', key);
-  let encrypted = cipher.update(text, 'utf8', 'hex');
-  encrypted += cipher.final('hex');
+  const cipher = crypto.createCipher("aes-256-cbc", key);
+  let encrypted = cipher.update(text, "utf8", "hex");
+  encrypted += cipher.final("hex");
   return encrypted;
 }
-
+// AES decryption function
+function decrypt(encryptedText, key) {
+  const decipher = crypto.createDecipher("aes-256-cbc", key);
+  let decrypted = decipher.update(encryptedText, "hex", "utf8");
+  decrypted += decipher.final("utf8");
+  return decrypted;
+}
 const updateUsers = AsyncHandler(async (req, res) => {
   var initModels = require("../model/init-models");
   var models = initModels(db);

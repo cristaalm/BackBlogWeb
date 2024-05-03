@@ -24,6 +24,26 @@ const findAllEntradas = AsyncHandler(async (req, res) => {
   });
 });
 
+const findEntradas = AsyncHandler(async (req, res) => {
+  // var initModels = require("../model/init-models");
+  // var models = initModels(db);
+  // listaEntradas = await models.entrada.findAll();
+  const rawQuery = `
+  SELECT id, titulo, idcategoria,usuario, estatus,(select perfil from usuario where upper(nombreusuario)=upper(usuario)) as perfil,
+  (select nombre from usuario where upper(nombreusuario)=upper(usuario)) as nombre
+  FROM entrada 
+`;
+  // listaUsuarios = await models.usuario.findAll();
+  listaEntradas = await db.query(rawQuery, {
+    type: db.QueryTypes.SELECT,
+  });
+
+  res.status(200).json({
+    description: "Successsfully fetched entradas data!",
+    data: listaEntradas,
+  });
+});
+
 const createEntradas = AsyncHandler(async (req, res) => {
   if (!req.body.titulo) {
     res.status(400).json({
@@ -259,4 +279,5 @@ module.exports = {
   review,
   findEntradasById,
   findByPublish,
+  findEntradas,
 };
