@@ -7,6 +7,7 @@ const {
   findCategoriesById,
   updateCategories,
   removeCategories,
+  findCategories
 } = require("../controllers/categories-controller");
 
 /**
@@ -60,6 +61,33 @@ const {
  *
  */
 routes.get("/", findAllCategories);
+
+/**
+ * @swagger
+ * /api/categories/text:
+ *  get:
+ *    tags:
+ *      - Categories
+ *    summary: Retrieve a list of categories
+ *    description: Retrieve a list of task froma categories table
+ *    responses:
+ *      200:
+ *        description: A list of categories.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                description:
+ *                  type: string
+ *                  example: Successfully fetched all data!
+ *                data:
+ *                  type: array
+ *                  items:
+ *                    $ref: '#/components/schemas/Categories'
+ *
+ */
+routes.get("/text", findCategories);
 
 /**
  * @swagger

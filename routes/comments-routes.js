@@ -3,6 +3,7 @@ const Express = require("express");
 const routes = Express.Router();
 const {
   findAllComments,
+  findComments,
   createComment,
   findByPost
 } = require("../controllers/comments-controller");
@@ -62,6 +63,33 @@ const {
  *
  */
 routes.get("/", findAllComments);
+
+/**
+ * @swagger
+ * /api/comments/promedio:
+ *  get:
+ *    tags:
+ *      - Comentarios
+ *    summary: Retrieve a list of comments
+ *    description: Retrieve a list of task froma comments table
+ *    responses:
+ *      200:
+ *        description: A list of comments.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                description:
+ *                  type: string
+ *                  example: Successfully fetched all data!
+ *                data:
+ *                  type: array
+ *                  items:
+ *                    $ref: '#/components/schemas/Comentarios'
+ *
+ */
+routes.get("/promedio", findComments);
 
 /**
  * @swagger

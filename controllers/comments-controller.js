@@ -14,6 +14,27 @@ const findAllComments = AsyncHandler(async (req, res) => {
   });
 });
 
+const findComments = AsyncHandler(async (req, res) => {
+  var initModels = require("../model/init-models");
+  const rawQuery = `
+  SELECT
+  identrada,
+  AVG(valoracion) AS promedio_valoracion
+FROM
+  comentario
+GROUP BY
+  identrada`;
+  // listaCategorias = await models.categoria.findAll();
+  listaCategorias = await db.query(rawQuery, {
+    type: db.QueryTypes.SELECT,
+  });
+
+  res.status(200).json({
+    description: "Successsfully fetched categories data!",
+    data: listaCategorias,
+  });
+});
+
 const createComment = AsyncHandler(async (req, res) => {
   if (!req.body.nombre) {
     return res.status(400).json({
@@ -89,6 +110,7 @@ const findByPost = AsyncHandler(async (req, res) => {
 
 module.exports = {
   findAllComments,
+  findComments,
   createComment,
   findByPost,
 };

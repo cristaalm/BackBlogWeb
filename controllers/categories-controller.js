@@ -40,6 +40,30 @@ FROM
   });
 });
 
+const findCategories = AsyncHandler(async (req, res) => {
+  var initModels = require("../model/init-models");
+  const rawQuery = `
+  SELECT
+  id,
+  nombre,
+  color,
+  (
+    SELECT COUNT(*)
+    FROM entrada
+    WHERE idcategoria = categoria.id AND estatus = 'Publicado'
+  ) AS entradas FROM
+  categoria`;
+  // listaCategorias = await models.categoria.findAll();
+  listaCategorias = await db.query(rawQuery, {
+    type: db.QueryTypes.SELECT,
+  });
+
+  res.status(200).json({
+    description: "Successsfully fetched categories data!",
+    data: listaCategorias,
+  });
+});
+
 const createCategories = AsyncHandler(async (req, res) => {
   if (!req.body.nombre) {
     res.status(400).json({
@@ -114,4 +138,5 @@ module.exports = {
   findCategoriesById,
   updateCategories,
   removeCategories,
+  findCategories,
 };
