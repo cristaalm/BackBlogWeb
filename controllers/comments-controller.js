@@ -18,12 +18,27 @@ const findComments = AsyncHandler(async (req, res) => {
   var initModels = require("../model/init-models");
   const rawQuery = `
   SELECT
-  identrada,
-  AVG(valoracion) AS promedio_valoracion
-FROM
-  comentario
-GROUP BY
-  identrada`;
+    identrada,
+    AVG(valoracion) AS promedio_valoracion,
+    (SELECT titulo FROM entrada WHERE id=identrada) AS titulo,
+    CASE
+      WHEN AVG(valoracion) >= 4.5 THEN '#00FF00' -- verde
+      WHEN AVG(valoracion) >= 3.5 THEN '#FFFF00' -- amarillo
+      WHEN AVG(valoracion) >= 2.5 THEN '#FFA500' -- naranja
+      WHEN AVG(valoracion) >= 1.5 THEN '#FF6347' -- rojo claro
+      ELSE '#FF0000' -- rojo
+    END AS color,
+    CASE
+      WHEN AVG(valoracion) >= 4.5 THEN 'Excelente'
+      WHEN AVG(valoracion) >= 3.5 THEN 'Muy Bueno'
+      WHEN AVG(valoracion) >= 2.5 THEN 'Bueno'
+      WHEN AVG(valoracion) >= 1.5 THEN 'Regular'
+      ELSE 'Malo'
+    END AS mensaje
+  FROM
+    comentario
+  GROUP BY
+    identrada`;
   // listaCategorias = await models.categoria.findAll();
   listaCategorias = await db.query(rawQuery, {
     type: db.QueryTypes.SELECT,
