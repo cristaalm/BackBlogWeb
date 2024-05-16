@@ -41,10 +41,18 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.TEXT,
         allowNull: true,
       },
-      descripcion: {
+      motivorechazo: {
         type: DataTypes.TEXT,
         allowNull: true,
       },
+      usuariorechazo: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      fecharechazo: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+      }
     },
     {
       sequelize,

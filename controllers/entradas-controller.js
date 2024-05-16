@@ -5,9 +5,6 @@ const moment = require("moment-timezone");
 const nodemailer = require("nodemailer");
 
 const findAllEntradas = AsyncHandler(async (req, res) => {
-  // var initModels = require("../model/init-models");
-  // var models = initModels(db);
-  // listaEntradas = await models.entrada.findAll();
   const rawQuery = `
   SELECT id, titulo, contenido, idcategoria,imgdestacada, fechapublicacion,usuario,estatus,descripcion,(select perfil from usuario where upper(nombreusuario)=upper(usuario)) as perfil,
   (select nombre from usuario where upper(nombreusuario)=upper(usuario)) as nombre
@@ -25,11 +22,9 @@ const findAllEntradas = AsyncHandler(async (req, res) => {
 });
 
 const findEntradas = AsyncHandler(async (req, res) => {
-  // var initModels = require("../model/init-models");
-  // var models = initModels(db);
-  // listaEntradas = await models.entrada.findAll();
   const rawQuery = `
   SELECT id, titulo, idcategoria,usuario, estatus,(select perfil from usuario where upper(nombreusuario)=upper(usuario)) as perfil,
+  (select nombre from categoria where id=idcategoria) as nombrecategoria,
   (select nombre from usuario where upper(nombreusuario)=upper(usuario)) as nombre
   FROM entrada 
 `;
@@ -178,6 +173,25 @@ const findByPublish = AsyncHandler(async (req, res) => {
   }
 });
 
+const findByDelete = AsyncHandler(async (req, res) => {
+  const rawQuery = `
+  SELECT id, titulo, idcategoria,usuario, motivorechazo, estatus,(select perfil from usuario where upper(nombreusuario)=upper(usuario)) as perfil,
+  (select nombre from usuario where upper(nombreusuario)=upper(usuario)) as nombre,
+  (select nombre from categoria where id=idcategoria) as categoria
+  FROM entrada
+  WHERE estatus = 'Eliminado'
+`;
+  // listaUsuarios = await models.usuario.findAll();
+  listaEntradas = await db.query(rawQuery, {
+    type: db.QueryTypes.SELECT,
+  });
+
+  res.status(200).json({
+    description: "Successsfully fetched entradas data!",
+    data: listaEntradas,
+  });
+});
+
 const changeStatus = AsyncHandler(async (req, res) => {
   var initModels = require("../model/init-models");
   var models = initModels(db);
@@ -190,6 +204,20 @@ const changeStatus = AsyncHandler(async (req, res) => {
     description: `Successfully updated entrada status to Publicado!`,
   });
 });
+
+const changePapelera = AsyncHandler(async (req, res) => {
+  var initModels = require("../model/init-models");
+  var models = initModels(db);
+  await models.entrada.update(
+    { estatus: "Eliminado" },
+    { where: { id: req.params.id } }
+  );
+
+  res.status(200).json({
+    description: `Successfully updated entrada status to Eliminado!`,
+  });
+});
+
 
 const review = AsyncHandler(async (req, res) => {
   var initModels = require("../model/init-models");
@@ -247,6 +275,62 @@ const review = AsyncHandler(async (req, res) => {
   });
 });
 
+const pendienteEstado = AsyncHandler(async (req, res) => {
+  var initModels = require("../model/init-models");
+  var models = initModels(db);
+
+  const rawQuery = `
+    SELECT id, titulo, contenido, idcategoria, imgdestacada, fechapublicacion, usuario, estatus, descripcion,
+      (SELECT nombre FROM usuario WHERE upper(nombreusuario) = upper(usuario)) AS nombre,
+      (SELECT correoelectronico FROM usuario WHERE upper(nombreusuario) = upper(usuario)) AS correoelectronico
+    FROM entrada
+    WHERE id = :id
+  `;
+  const listaEntradas = await db.query(rawQuery, {
+    type: db.QueryTypes.SELECT,
+    replacements: { id: req.params.id },
+  });
+
+  if (listaEntradas.length === 0) {
+    return res.status(404).json({ error: "Article not found" });
+  }
+
+  const correo = listaEntradas[0].correoelectronico; // Select the first entry from the result
+  console.log(correo);
+  await models.entrada.update(
+    { estatus: "Pendiente" },
+    { where: { id: req.params.id } }
+  ); // Update the status of the article
+
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: "aquavisionotification@gmail.com",
+      pass: "lsve btbq rhcl wpvs",
+    },
+  });
+  const info = await transporter.sendMail({
+    from: correo, // Use correoelectronico as the from address
+    to: "aquavisionotification@gmail.com",
+    subject: "Pendiente Blog Post",
+    html: `
+      <h3>Hi!</h3>
+      <p>
+        I'm <strong>${listaEntradas[0].nombre}</strong>. I have finished my article, please review it so you can publish it. I am eager to share it, it's cool: <strong><i>${listaEntradas[0].titulo}</i></strong>
+      </p>
+      <p><i>The Umizoomis Company Team </i></p>
+      <p><i>Editor Profile </i></p>
+    `,
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  res.status(200).json({
+    description: `Successfully updated entrada status to Pendiente!`,
+  });
+});
+
 const updateEntradas = AsyncHandler(async (req, res) => {
   var initModels = require("../model/init-models");
   var models = initModels(db);
@@ -280,4 +364,7 @@ module.exports = {
   findEntradasById,
   findByPublish,
   findEntradas,
+  changePapelera,
+  findByDelete,
+  pendienteEstado
 };

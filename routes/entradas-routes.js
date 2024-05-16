@@ -9,9 +9,12 @@ const {
   removeEntradas,
   changeStatus,
   review,
+  pendienteEstado,
   findByPublish,
+  findByDelete,
   findEntradasById,
-  findEntradas
+  findEntradas,
+  changePapelera
 } = require("../controllers/entradas-controller");
 
 /**
@@ -141,6 +144,36 @@ routes.post("/status/:id", changeStatus);
 
 /**
  * @swagger
+ * /api/entradas/reciclaje/{id}:
+ *    post:
+ *      tags:
+ *        - Entradas
+ *      summary: Update entrada status by ID
+ *      description: Update entrada status to "Publicado" by ID
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          description: ID of the entrada to update
+ *          schema:
+ *            type: integer
+ *            format: int64
+ *      responses:
+ *        200:
+ *          description: Success message
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully updated entrada status to "Eliminado"!
+ */
+routes.post("/reciclaje/:id", changePapelera);
+
+/**
+ * @swagger
  * /api/entradas/review/{id}:
  *    post:
  *      tags:
@@ -168,6 +201,36 @@ routes.post("/status/:id", changeStatus);
  *                    example: Successfully updated entrada status to "Revisión"!
  */
 routes.post("/review/:id", review);
+
+/**
+ * @swagger
+ * /api/entradas/pendiente/{id}:
+ *    post:
+ *      tags:
+ *        - Entradas
+ *      summary: Update entrada status by ID
+ *      description: Update entrada status to "pendiente" by ID
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          description: ID of the entrada to update
+ *          schema:
+ *            type: integer
+ *            format: int64
+ *      responses:
+ *        200:
+ *          description: Success message
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully updated entrada status to "pendiente"!
+ */
+routes.post("/pendiente/:id", pendienteEstado);
 
 
 /**
@@ -382,6 +445,60 @@ routes.delete("/:id", removeEntradas);
  *          description: Error searching for published entries
  */
 routes.post("/publish", findByPublish);
+
+/**
+ * @swagger
+ * /api/entradas/delete:
+ *    post:
+ *      tags:
+ *        - Entradas
+ *      summary: Retrieve deleteed entradas
+ *      description: Retrieve entradas with status 'Eliminado' from the database
+ *      responses:
+ *        200:
+ *          description: Entradas retrieved successfully
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: array
+ *                items:
+ *                  type: object
+ *                  properties:
+ *                    titulo:
+ *                      type: string
+ *                      description: Title of the entrada
+ *                      example: "Titulo de la entrada"
+ *                    descripcion:
+ *                      type: string
+ *                      description: Description of the entrada
+ *                      example: "Descripción de la entrada"
+ *                    contenido:
+ *                      type: string
+ *                      description: Content of the entrada
+ *                      example: "Contenido de la entrada"
+ *                    idcategoria:
+ *                      type: integer
+ *                      description: ID of the category of the entrada
+ *                      example: 1
+ *                    fechapublicacion:
+ *                      type: string
+ *                      format: date
+ *                      description: Date of publication of the entrada
+ *                      example: 2024-04-19
+ *                    usuario:
+ *                      type: string
+ *                      description: User who published the entrada
+ *                      example: John Doe
+ *                    estatus:
+ *                      type: string
+ *                      description: Status of the entrada
+ *                      example: Publicado
+ *        404:
+ *          description: No entries found with status 'Publicado'
+ *        500:
+ *          description: Error searching for published entries
+ */
+routes.post("/delete", findByDelete);
 
 /**
  * @swagger
