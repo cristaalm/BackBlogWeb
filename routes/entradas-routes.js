@@ -144,20 +144,27 @@ routes.post("/status/:id", changeStatus);
 
 /**
  * @swagger
- * /api/entradas/reciclaje/{id}:
+ * /api/entradas/reciclaje:
  *    post:
  *      tags:
  *        - Entradas
  *      summary: Update entrada status by ID
  *      description: Update entrada status to "Publicado" by ID
- *      parameters:
- *        - name: id
- *          in: path
- *          required: true
- *          description: ID of the entrada to update
- *          schema:
- *            type: integer
- *            format: int64
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                id:
+ *                  type: integer
+ *                  description: enter your id
+ *                  example: 1
+ *                motivorechazo:
+ *                  type: string
+ *                  description: enter your motivorechazo
+ *                  example: motivorechazo
  *      responses:
  *        200:
  *          description: Success message
@@ -170,7 +177,7 @@ routes.post("/status/:id", changeStatus);
  *                    type: string
  *                    example: Successfully updated entrada status to "Eliminado"!
  */
-routes.post("/reciclaje/:id", changePapelera);
+routes.post("/reciclaje", changePapelera);
 
 /**
  * @swagger

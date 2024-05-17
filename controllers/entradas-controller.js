@@ -206,11 +206,18 @@ const changeStatus = AsyncHandler(async (req, res) => {
 });
 
 const changePapelera = AsyncHandler(async (req, res) => {
+  const { id, motivorechazo } = req.body;
+
   var initModels = require("../model/init-models");
   var models = initModels(db);
+
   await models.entrada.update(
-    { estatus: "Eliminado" },
-    { where: { id: req.params.id } }
+    {
+      estatus: "Eliminado",
+      motivorechazo: motivorechazo,
+      fecharechazo: moment.tz("America/Mexico_City"),
+    },
+    { where: { id: id } }
   );
 
   res.status(200).json({
