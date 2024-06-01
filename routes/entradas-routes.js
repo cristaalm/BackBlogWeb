@@ -14,7 +14,7 @@ const {
   findByDelete,
   findEntradasById,
   findEntradas,
-  changePapelera,
+  changePapelera
 } = require("../controllers/entradas-controller");
 
 /**
@@ -26,46 +26,36 @@ const {
  *        properties:
  *          titulo:
  *            type: string
- *            description: Title of the entrada
- *            example: "Titulo de la entrada"
+ *            description: ingresar titulo
+ *            example: titulo
  *          descripcion:
  *            type: string
- *            description: Description of the entrada
- *            example: "Descripción de la entrada"
+ *            description: ingresar titulo
+ *            example: titulo
  *          contenido:
  *            type: string
- *            description: Content of the entrada
- *            example: "Contenido de la entrada"
+ *            description: enter your contenido
+ *            example: contenido
  *          idcategoria:
  *            type: integer
- *            description: ID of the category of the entrada
+ *            description: enter your idcategoria
  *            example: 1
  *          imgdestacada:
  *            type: string
- *            description: URL of the featured image of the entrada
- *            example: "http://example.com/image.jpg"
+ *            description: enter your imgdestacada
+ *            example: imgdestacada
  *          fechapublicacion:
- *            type: string
- *            format: date
- *            description: Date of publication of the entrada
- *            example: "2024-03-12"
+ *            type: date
+ *            description: enter your fechapublicacion
+ *            example: 2024-03-12
  *          usuario:
  *            type: string
- *            description: User who published the entrada
- *            example: "John Doe"
+ *            description: enter your usuario
+ *            example: usuario
  *          estatus:
  *            type: string
- *            description: Status of the entrada
- *            example: "Publicado"
- *          motivorechazo:
- *            type: string
- *            description: Reason for rejection (if any)
- *            example: "Contenido inapropiado"
- *          fecharechazo:
- *            type: string
- *            format: date
- *            description: Date of rejection (if any)
- *            example: "2024-03-12"
+ *            description: enter your estatus
+ *            example: estatus
  */
 
 /**
@@ -115,9 +105,295 @@ routes.get("/", findAllEntradas);
  *                  example: Successfully fetched all data!
  *                data:
  *                  type: array
+ *                  items:
+ *                    $ref: '#/components/schemas/Entradas'
  *
  */
 routes.get("/text", findEntradas);
+
+
+/**
+ * @swagger
+ * /api/entradas/status/{id}:
+ *    post:
+ *      tags:
+ *        - Entradas
+ *      summary: Update entrada status by ID
+ *      description: Update entrada status to "Publicado" by ID
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          description: ID of the entrada to update
+ *          schema:
+ *            type: integer
+ *            format: int64
+ *      responses:
+ *        200:
+ *          description: Success message
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully updated entrada status to "Publicado"!
+ */
+routes.post("/status/:id", changeStatus);
+
+/**
+ * @swagger
+ * /api/entradas/reciclaje:
+ *    post:
+ *      tags:
+ *        - Entradas
+ *      summary: Update entrada status by ID
+ *      description: Update entrada status to "Publicado" by ID
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                id:
+ *                  type: integer
+ *                  description: enter your id
+ *                  example: 1
+ *                motivorechazo:
+ *                  type: string
+ *                  description: enter your motivorechazo
+ *                  example: motivorechazo
+ *      responses:
+ *        200:
+ *          description: Success message
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully updated entrada status to "Eliminado"!
+ */
+routes.post("/reciclaje", changePapelera);
+
+/**
+ * @swagger
+ * /api/entradas/review/{id}:
+ *    post:
+ *      tags:
+ *        - Entradas
+ *      summary: Update entrada status by ID
+ *      description: Update entrada status to "Revisión" by ID
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          description: ID of the entrada to update
+ *          schema:
+ *            type: integer
+ *            format: int64
+ *      responses:
+ *        200:
+ *          description: Success message
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully updated entrada status to "Revisión"!
+ */
+routes.post("/review/:id", review);
+
+/**
+ * @swagger
+ * /api/entradas/pendiente/{id}:
+ *    post:
+ *      tags:
+ *        - Entradas
+ *      summary: Update entrada status by ID
+ *      description: Update entrada status to "pendiente" by ID
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          description: ID of the entrada to update
+ *          schema:
+ *            type: integer
+ *            format: int64
+ *      responses:
+ *        200:
+ *          description: Success message
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully updated entrada status to "pendiente"!
+ */
+routes.post("/pendiente/:id", pendienteEstado);
+
+
+/**
+ * @swagger
+ * /api/entradas/:
+ *    post:
+ *      tags:
+ *        - Entradas
+ *      description: Create entradas API
+ *      summary: Create entradas data
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                titulo:
+ *                  type: string
+ *                  description: ingresar titulo
+ *                  example: titulo
+ *                contenido:
+ *                  type: string
+ *                  description: enter your contenido
+ *                  example: contenido
+ *                idcategoria:
+ *                  type: integer
+ *                  description: enter your idcategoria
+ *                  example: 1
+ *                imgdestacada:
+ *                  type: string
+ *                  description: enter your imgdestacada
+ *                  example: imgdestacada
+ *                fechapublicacion:
+ *                  type: date
+ *                  description: enter your fechapublicacion
+ *                  example: 2024-03-12
+ *                usuario:
+ *                  type: string
+ *                  description: enter your usuario
+ *                  example: usuario
+ *                estatus:
+ *                  type: string
+ *                  description: enter your estatus
+ *                  example: estatus
+ *      responses:
+ *        200:
+ *          description: Successfully created data
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully created data!
+ *
+ */
+routes.post("/", createEntradas);
+/**
+ * @swagger
+ * /api/entradas/{id}:
+ *    patch:
+ *      tags:
+ *        - Entradas
+ *      summary: Update entradas data
+ *      description: update entradas data API
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          description: Entradas id
+ *          schema:
+ *            type: integer
+ *            format: int64
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                titulo:
+ *                  type: string
+ *                  description: ingresar titulo
+ *                  example: titulo
+ *                contenido:
+ *                  type: string
+ *                  description: enter your contenido
+ *                  example: contenido
+ *                idcategoria:
+ *                  type: integer
+ *                  description: enter your idcategoria
+ *                  example: 1
+ *                imgdestacada:
+ *                  type: string
+ *                  description: enter your imgdestacada
+ *                  example: imgdestacada
+ *                fechapublicacion:
+ *                  type: date
+ *                  description: enter your fechapublicacion
+ *                  example: 2024-03-12
+ *                usuario:
+ *                  type: string
+ *                  description: enter your usuario
+ *                  example: usuario
+ *                estatus:
+ *                  type: string
+ *                  description: enter your estatus
+ *                  example: estatus
+ *      responses:
+ *        200:
+ *          description: Successfully updated data
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully updated data!
+ *
+ *
+ */
+routes.patch("/:id", updateEntradas);
+/**
+ * @swagger
+ * /api/entradas/{id}:
+ *    delete:
+ *      tags:
+ *        - Entradas
+ *      summary: Remove Entradas data by id
+ *      description: Remove entradas API
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          description: Entradas id
+ *          schema:
+ *            type: integer
+ *            format: int64
+ *      responses:
+ *        200:
+ *          description: Successfully deleted data
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully updated data!
+ *
+ *
+ */
+routes.delete("/:id", removeEntradas);
 
 /**
  * @swagger
@@ -170,22 +446,66 @@ routes.get("/text", findEntradas);
  *                      type: string
  *                      description: Status of the entrada
  *                      example: Publicado
- *                    motivorechazo:
- *                      type: string
- *                      description: Reason for rejection (if any)
- *                      example: "Contenido inapropiado"
- *                    fecharechazo:
- *                      type: string
- *                      format: date
- *                      description: Date of rejection (if any)
- *                      example: 2024-03-12
  *        404:
  *          description: No entries found with status 'Publicado'
  *        500:
  *          description: Error searching for published entries
  */
-
 routes.post("/publish", findByPublish);
+
+/**
+ * @swagger
+ * /api/entradas/delete:
+ *    post:
+ *      tags:
+ *        - Entradas
+ *      summary: Retrieve deleteed entradas
+ *      description: Retrieve entradas with status 'Eliminado' from the database
+ *      responses:
+ *        200:
+ *          description: Entradas retrieved successfully
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: array
+ *                items:
+ *                  type: object
+ *                  properties:
+ *                    titulo:
+ *                      type: string
+ *                      description: Title of the entrada
+ *                      example: "Titulo de la entrada"
+ *                    descripcion:
+ *                      type: string
+ *                      description: Description of the entrada
+ *                      example: "Descripción de la entrada"
+ *                    contenido:
+ *                      type: string
+ *                      description: Content of the entrada
+ *                      example: "Contenido de la entrada"
+ *                    idcategoria:
+ *                      type: integer
+ *                      description: ID of the category of the entrada
+ *                      example: 1
+ *                    fechapublicacion:
+ *                      type: string
+ *                      format: date
+ *                      description: Date of publication of the entrada
+ *                      example: 2024-04-19
+ *                    usuario:
+ *                      type: string
+ *                      description: User who published the entrada
+ *                      example: John Doe
+ *                    estatus:
+ *                      type: string
+ *                      description: Status of the entrada
+ *                      example: Publicado
+ *        404:
+ *          description: No entries found with status 'Publicado'
+ *        500:
+ *          description: Error searching for published entries
+ */
+routes.post("/delete", findByDelete);
 
 /**
  * @swagger

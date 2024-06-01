@@ -139,4 +139,135 @@ routes.get("/text", findCategories);
  */
 routes.get("/:id", findCategoriesById);
 
+/**
+ * @swagger
+ * /api/categories/:
+ *    post:
+ *      tags:
+ *        - Categories
+ *      description: Create categories API
+ *      summary: Create categories data
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                  nombre:
+ *                      type: string
+ *                      description: ingresar nombre
+ *                      example: name
+ *                  descripcion:
+ *                      type: string
+ *                      description: enter your descripcion
+ *                      example: descripcion
+ *                  imgdestacada:
+ *                      type: string
+ *                      description: enter your img
+ *                      example: image
+ *                  color:
+ *                      type: string
+ *                      description: enter your color
+ *                      example: color
+ *      responses:
+ *        200:
+ *          description: Successfully created data
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully created data!
+ *
+ */
+routes.post("/", createCategories);
+/**
+ * @swagger
+ * /api/categories/{id}:
+ *    patch:
+ *      tags:
+ *        - Categories
+ *      summary: Update categories data
+ *      description: update categories data API
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          description: Categories id
+ *          schema:
+ *            type: integer
+ *            format: int64
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                  nombre:
+ *                      type: string
+ *                      description: ingresar nombre
+ *                      example: name
+ *                  descripcion:
+ *                      type: string
+ *                      description: enter your descripcion
+ *                      example: descripcion
+ *                  imgdestacada:
+ *                      type: string
+ *                      description: enter your img
+ *                      example: image
+ *                  color:
+ *                      type: string
+ *                      description: enter your color
+ *                      example: color
+ *      responses:
+ *        200:
+ *          description: Successfully updated data
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully updated data!
+ *
+ *
+ */
+routes.patch("/:id", updateCategories);
+/**
+ * @swagger
+ * /api/categories/{id}:
+ *    delete:
+ *      tags:
+ *        - Categories
+ *      summary: Remove Categories data by id
+ *      description: Remove categories API
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          description: Categories id
+ *          schema:
+ *            type: integer
+ *            format: int64
+ *      responses:
+ *        200:
+ *          description: Successfully deleted data
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully updated data!
+ *
+ *
+ */
+routes.delete("/:id", removeCategories);
+
 module.exports = routes;
